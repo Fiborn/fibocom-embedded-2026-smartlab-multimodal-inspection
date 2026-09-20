@@ -24,29 +24,29 @@
 系统采用“云-边-端”协同架构:
 
 ```mermaid
-graph TB
+graph LR
     subgraph Cloud["☁️ 云端服务器层"]
-        IoT["华为云 IoT 平台<br/>设备全链路接入 · 时序数据存储 · 远程监控"]
-        Qwen["通义千问多模态大模型 API<br/>视觉对话增强 · 复杂场景推理 · 多模态交互"]
+        IoT["华为云 IoT 平台<br/>设备接入 · 时序数据存储"]
+        Qwen["通义千问多模态大模型 API<br/>视觉对话 · 复杂场景推理"]
     end
 
     L610["L610 4G 通信模组<br/>MQTT 协议传输"]
 
-    subgraph Edge["🤖 边缘侧(RDK X5)"]
-        Nav["NavigationNode 导航调度节点<br/>巡检任务调度 · 全局路径规划 · 底盘控制"]
-        Vis["VisionNode 智能视觉节点<br/>图像采集 · 目标检测 · 视觉指令交互"]
-        A1["导航算法单元<br/>Cartographer SLAM 建图 · Navigation 导航栈"]
-        A2["BPU 推理加速<br/>hbDNN 模型调度 · YOLOv8 目标检测"]
-        A3["千问大模型交互接口<br/>Base64 编解码 · HTTP 请求封装 · 响应结果解析"]
+    subgraph Edge["🤖 边缘侧 (RDK X5)"]
+        Nav["NavigationNode<br/>任务调度 · 路径规划"]
+        Vis["VisionNode<br/>图像采集 · 目标检测"]
+        A1["导航算法单元<br/>Cartographer · Navigation"]
+        A2["BPU 推理加速<br/>hbDNN · YOLOv8"]
+        A3["千问大模型接口<br/>Base64 · HTTP · 解析"]
     end
 
     subgraph Dev["🔩 端侧驱动层"]
-        Lidar["激光雷达 / IMU 模组<br/>环境感知与位姿采集"]
-        Cam["高清 USB 摄像头<br/>视觉图像实时采集"]
-        Chassis["底盘驱动单元<br/>运动执行与反馈"]
+        Lidar["激光雷达 / IMU 模组"]
+        Cam["高清 USB 摄像头"]
+        Chassis["底盘驱动单元"]
     end
 
-    Cloud <-->|MQTT| L610
+    Cloud <-->|"4G · MQTT"| L610
     L610 <--> Edge
     Nav <--> Vis
     Nav --> A1

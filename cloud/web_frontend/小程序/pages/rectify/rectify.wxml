@@ -1,0 +1,50 @@
+<view class="empty" wx:if="{{loading}}">
+  <view class="empty-icon">⏳</view>
+  加载中…
+</view>
+
+<block wx:else>
+  <view class="card">
+    <view class="card-title">⚠️ 工位异常项</view>
+    <view class="station-line" wx:if="{{myStation}}">工位 {{myStation.station_id}} · {{myStation.has_abnormality === '是' ? '存在异常' : '状态正常'}}</view>
+    <view class="issue-list" wx:if="{{issueItems.length}}">
+      <view class="issue-item" wx:for="{{issueItems}}" wx:key="*this">• {{item}}</view>
+    </view>
+    <view class="issue-empty" wx:elif="{{myStation}}">🎉 您的工位状态正常，无需整改</view>
+    <view class="today-done" wx:if="{{todayDone}}">✅ 今日已提交整改结果</view>
+  </view>
+
+  <view class="card" wx:if="{{hasAbnormality && !todayDone}}">
+    <view class="card-title">📷 拍照上传整改结果</view>
+    <view class="photo-box" bindtap="chooseImage">
+      <image wx:if="{{imageTemp}}" class="photo" src="{{imageTemp}}" mode="aspectFill" />
+      <view wx:else class="photo-placeholder">
+        <view class="photo-icon">📷</view>
+        <view class="photo-text">点击拍照 / 从相册选择</view>
+      </view>
+    </view>
+    <view class="btn-wrap">
+      <button class="btn-primary {{submitting ? 'disabled' : ''}}" bindtap="submit" loading="{{submitting}}">提交整改结果</button>
+    </view>
+    <view class="hint">请将异常整改完成后拍摄现场照片上传，当天每工位限提交一次</view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">📄 我的整改记录</view>
+    <view class="empty-sm" wx:if="{{!records.length}}">暂无整改记录</view>
+    <view class="record" wx:for="{{records}}" wx:key="id">
+      <view class="r-info">
+        <view class="r-time">🕐 {{item.created_at}}</view>
+        <view class="r-desc">{{item.issue_desc || '未填写异常描述'}}</view>
+      </view>
+      <image
+        wx:if="{{item.imageUrl}}"
+        class="r-img"
+        src="{{item.imageUrl}}"
+        mode="aspectFill"
+        data-url="{{item.imageUrl}}"
+        bindtap="previewRecord"
+      />
+    </view>
+  </view>
+</block>

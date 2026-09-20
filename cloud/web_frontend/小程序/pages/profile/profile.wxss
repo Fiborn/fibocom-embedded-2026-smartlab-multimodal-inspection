@@ -1,0 +1,150 @@
+page {
+  padding-bottom: 140rpx;
+}
+
+.p-head {
+  position: relative;
+  background: linear-gradient(160deg, #3f8ae2 0%, #6db3f5 58%, #8ec9fa 100%);
+  padding: 70rpx 40rpx;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.deco {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.d1 {
+  width: 280rpx;
+  height: 280rpx;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.5), transparent 70%);
+  top: -80rpx;
+  right: -60rpx;
+}
+
+.d2 {
+  width: 180rpx;
+  height: 180rpx;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.35), transparent 70%);
+  bottom: -60rpx;
+  left: -30rpx;
+}
+
+.p-avatar {
+  width: 130rpx;
+  height: 130rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  border: 4rpx solid rgba(255, 255, 255, 0.55);
+  color: #fff;
+  font-size: 56rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 28rpx;
+}
+
+.p-info {
+  position: relative;
+}
+
+.p-name {
+  color: #fff;
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.p-id {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 24rpx;
+  margin-top: 10rpx;
+}
+
+.binding-row {
+  display: flex;
+  align-items: center;
+}
+
+.bind-icon {
+  width: 84rpx;
+  height: 84rpx;
+  border-radius: 26rpx;
+  background: linear-gradient(135deg, #e7f0ff, #d3e5ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42rpx;
+  margin-right: 22rpx;
+}
+
+.bind-info {
+  flex: 1;
+}
+
+.b-lab {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1b2a4a;
+}
+
+.b-station {
+  font-size: 24rpx;
+  color: #7a869e;
+  margin-top: 8rpx;
+}
+
+.edit-btn {
+  padding: 10rpx 30rpx;
+  border-radius: 32rpx;
+  background: linear-gradient(135deg, #3b82f6, #7ac0f8);
+  color: #fff;
+  font-size: 25rpx;
+  box-shadow: 0 8rpx 18rpx rgba(59, 130, 246, 0.28);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 26rpx 0;
+  border-bottom: 1rpx solid #f0f3f9;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.bubble.small {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 20rpx;
+  font-size: 30rpx;
+}
+
+.m-text {
+  margin-left: 22rpx;
+  font-size: 29rpx;
+  color: #2b3550;
+  font-weight: 500;
+}
+
+.m-arrow {
+  margin-left: auto;
+  color: #c4ccda;
+  font-size: 34rpx;
+}
+
+.logout-btn {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  background: #fff;
+  color: #f04355;
+  border-radius: 48rpx;
+  font-size: 31rpx;
+  font-weight: 600;
+  line-height: 88rpx;
+  box-shadow: 0 10rpx 26rpx rgba(240, 67, 85, 0.12);
+}

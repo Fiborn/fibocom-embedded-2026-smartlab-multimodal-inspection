@@ -1,0 +1,138 @@
+/* 步骤条 */
+.steps {
+  display: flex;
+  align-items: center;
+  padding: 30rpx 40rpx 10rpx;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+}
+
+.step-num {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: #e4e9f2;
+  color: #8a95ad;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  font-weight: 700;
+  margin-right: 14rpx;
+}
+
+.step text {
+  font-size: 26rpx;
+  color: #8a95ad;
+}
+
+.step.active .step-num {
+  background: linear-gradient(135deg, #3b82f6, #7ac0f8);
+  color: #fff;
+  box-shadow: 0 6rpx 16rpx rgba(59, 130, 246, 0.3);
+}
+
+.step.active text {
+  color: #1b2a4a;
+  font-weight: 600;
+}
+
+.step-line {
+  flex: 1;
+  height: 2rpx;
+  background: #e4e9f2;
+  margin: 0 20rpx;
+}
+
+/* 实验室选择 */
+.picker {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #f0f7fe, #e7f2fd);
+  border: 2rpx solid #d6e8fb;
+  border-radius: 22rpx;
+  padding: 26rpx;
+}
+
+.picker.placeholder .picker-main {
+  color: #98a3b8;
+}
+
+.picker-main {
+  font-size: 31rpx;
+  font-weight: 700;
+  color: #1b2a4a;
+}
+
+.picker-sub {
+  font-size: 23rpx;
+  color: #7a869e;
+  margin-top: 8rpx;
+}
+
+.arrow {
+  color: #9aa5ba;
+  font-size: 40rpx;
+}
+
+.lab-address {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: #0cae6d;
+}
+
+/* 工位选择 */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.chip {
+  width: calc(25% - 12rpx);
+  margin: 6rpx;
+  box-sizing: border-box;
+  text-align: center;
+  background: #f4f7fc;
+  border-radius: 16rpx;
+  padding: 18rpx 0;
+  font-size: 26rpx;
+  color: #44506b;
+}
+
+.chip-active {
+  background: linear-gradient(135deg, #3b82f6, #7ac0f8);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 8rpx 18rpx rgba(59, 130, 246, 0.3);
+}
+
+.custom-row {
+  display: flex;
+  align-items: center;
+  margin-top: 24rpx;
+}
+
+.custom-label {
+  font-size: 26rpx;
+  color: #7a869e;
+  margin-right: 14rpx;
+}
+
+.custom-input {
+  flex: 1;
+  background: #f4f7fc;
+  border-radius: 16rpx;
+  padding: 16rpx 22rpx;
+  font-size: 26rpx;
+}
+
+.hint {
+  text-align: center;
+  color: #98a3b8;
+  font-size: 23rpx;
+  margin-top: 24rpx;
+}

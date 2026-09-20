@@ -1,0 +1,24 @@
+<view class="empty" wx:if="{{loading}}">
+  <view class="empty-icon">⏳</view>
+  加载中…
+</view>
+<view class="empty" wx:elif="{{error}}">
+  <view class="empty-icon">📡</view>
+  {{error}}
+</view>
+<view class="empty" wx:elif="{{!notices.length}}">
+  <view class="empty-icon">📭</view>
+  暂无公告
+</view>
+
+<view class="notice-card" wx:for="{{notices}}" wx:key="id" data-id="{{item.id}}" bindtap="toggle">
+  <view class="n-accent"></view>
+  <view class="n-main">
+    <view class="n-head">
+      <view class="n-title">📌 {{item.title}}</view>
+      <text class="arrow2 {{openId === item.id ? 'open' : ''}}">⌄</text>
+    </view>
+    <view class="n-time">🕐 {{item.created_at}} · {{item.publisher}}</view>
+    <view class="n-content" wx:if="{{openId === item.id}}">{{item.content}}</view>
+  </view>
+</view>

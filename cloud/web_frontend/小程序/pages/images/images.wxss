@@ -1,0 +1,91 @@
+page {
+  padding-bottom: 140rpx;
+}
+
+.tip {
+  text-align: center;
+  color: #8a95ad;
+  font-size: 22rpx;
+  padding: 18rpx;
+}
+
+.group-head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.g-badge {
+  min-width: 92rpx;
+  height: 64rpx;
+  padding: 0 18rpx;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #3b82f6, #7ac0f8);
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 700;
+  border-radius: 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16rpx;
+  box-shadow: 0 8rpx 18rpx rgba(59, 130, 246, 0.28);
+}
+
+.g-badge-mine {
+  background: linear-gradient(135deg, #f08a24, #ffb347);
+  box-shadow: 0 8rpx 18rpx rgba(240, 138, 36, 0.3);
+}
+
+.group-count {
+  margin-left: auto;
+  color: #98a3b8;
+  font-size: 23rpx;
+}
+
+.img-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.img-item {
+  width: 31.33%;
+  margin: 1%;
+  box-sizing: border-box;
+}
+
+.img-frame {
+  position: relative;
+  border-radius: 18rpx;
+  overflow: hidden;
+  background: #eef2fa;
+}
+
+.img {
+  width: 100%;
+  height: 210rpx;
+  border-radius: 18rpx;
+  display: block;
+}
+
+.img-zoom {
+  position: absolute;
+  right: 10rpx;
+  bottom: 10rpx;
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  background: rgba(11, 31, 82, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  color: #fff;
+}
+
+.img-time {
+  font-size: 20rpx;
+  color: #98a3b8;
+  margin-top: 8rpx;
+  text-align: center;
+}

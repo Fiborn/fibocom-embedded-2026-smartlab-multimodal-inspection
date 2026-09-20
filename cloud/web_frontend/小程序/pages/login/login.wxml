@@ -1,0 +1,37 @@
+<view class="login-wrap">
+  <view class="deco d1"></view>
+  <view class="deco d2"></view>
+  <view class="deco d3"></view>
+
+  <view class="logo-ring">
+    <view class="logo">⚡</view>
+  </view>
+  <view class="app-name">智慧电子实验室</view>
+
+  <view class="tabs">
+    <view class="tab {{mode === 'login' ? 'active' : ''}}" data-mode="login" bindtap="switchMode">登录</view>
+    <view class="tab {{mode === 'register' ? 'active' : ''}}" data-mode="register" bindtap="switchMode">注册</view>
+  </view>
+
+  <view class="form">
+    <view class="field">
+      <text class="f-icon">🎓</text>
+      <input class="input" placeholder="请输入学号" data-field="studentId" value="{{studentId}}" bindinput="onInput" />
+    </view>
+    <view class="field">
+      <text class="f-icon">👤</text>
+      <input class="input" placeholder="请输入姓名" data-field="name" value="{{name}}" bindinput="onInput" />
+    </view>
+    <view class="field" wx:if="{{mode === 'register'}}">
+      <text class="f-icon">📱</text>
+      <input class="input" type="number" placeholder="手机号（选填）" data-field="phone" value="{{phone}}" bindinput="onInput" />
+    </view>
+  </view>
+
+  <button class="btn-primary login-btn {{loading ? 'disabled' : ''}}" bindtap="submit" loading="{{loading}}">
+    {{mode === 'login' ? '登 录' : '注 册'}}
+  </button>
+
+  <view class="hint" wx:if="{{mode === 'register'}}">首次使用请先注册，注册成功后需绑定实验室与工位</view>
+  <view class="hint" wx:else>未注册过？请切换到「注册」创建账号</view>
+</view>

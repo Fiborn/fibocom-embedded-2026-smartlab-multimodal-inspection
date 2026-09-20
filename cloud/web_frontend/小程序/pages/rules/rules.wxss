@@ -1,0 +1,61 @@
+.rule-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.rule-head {
+  display: flex;
+  align-items: center;
+  padding: 26rpx 32rpx;
+  font-size: 31rpx;
+  font-weight: 700;
+  color: #fff;
+}
+
+.rh-blue { background: linear-gradient(135deg, #3b82f6, #7ac0f8); }
+.rh-cyan { background: linear-gradient(135deg, #7ac0f8, #8adcc9); }
+.rh-green { background: linear-gradient(135deg, #0cae6d, #4fd6a0); }
+.rh-orange { background: linear-gradient(135deg, #f08a24, #ffb347); }
+
+.rh-icon {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 18rpx;
+  background: rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  margin-right: 18rpx;
+}
+
+.rule-list {
+  padding: 12rpx 32rpx 24rpx;
+}
+
+.rule-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 16rpx 0;
+}
+
+.rule-num {
+  width: 46rpx;
+  height: 46rpx;
+  border-radius: 50%;
+  background: #e6f1fd;
+  color: #3b82f6;
+  text-align: center;
+  line-height: 46rpx;
+  font-size: 23rpx;
+  font-weight: 600;
+  margin-right: 18rpx;
+  flex-shrink: 0;
+}
+
+.rule-text {
+  flex: 1;
+  font-size: 27rpx;
+  line-height: 1.7;
+  color: #5a6780;
+}

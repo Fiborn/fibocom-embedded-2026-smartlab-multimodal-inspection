@@ -1,0 +1,104 @@
+<view class="header">
+  <view class="deco d1"></view>
+  <view class="deco d2"></view>
+  <view class="deco d3"></view>
+  <view class="hello">
+    <view class="greet">{{greeting}}，{{student.name}} 👋</view>
+    <view class="chip-line">
+      <view class="id-chip">🎓 {{student.student_id}}</view>
+      <view class="id-chip">{{todayChecked ? '✅ 今日已签到' : '⏰ 今日未签到'}}</view>
+    </view>
+  </view>
+  <view class="avatar">{{avatarText}}</view>
+</view>
+
+<view class="card bind-card">
+  <view class="bind-icon">🏫</view>
+  <view class="bind-info">
+    <view class="bind-lab">{{student.lab || '未绑定实验室'}}</view>
+    <view class="bind-sub">💺 工位 {{student.station_number || '未绑定'}}</view>
+  </view>
+  <view class="tag {{todayChecked ? 'tag-green' : 'tag-orange'}}">{{todayChecked ? '已签到' : '未签到'}}</view>
+</view>
+
+<view class="card" wx:if="{{myStation}}">
+  <view class="card-title">⚡ 我的工位实时状态</view>
+  <view class="status-grid">
+    <view class="status-item">
+      <view class="s-icon">🪑</view>
+      <text class="s-label">座椅</text>
+      <text class="s-value {{myStation.chairCls}}">{{myStation.chair_status}}</text>
+    </view>
+    <view class="status-item">
+      <view class="s-icon">📊</view>
+      <text class="s-label">示波器</text>
+      <text class="s-value {{myStation.oscCls}}">{{myStation.oscilloscope}}</text>
+    </view>
+    <view class="status-item">
+      <view class="s-icon">🎛️</view>
+      <text class="s-label">信号源</text>
+      <text class="s-value {{myStation.sigCls}}">{{myStation.siggen}}</text>
+    </view>
+    <view class="status-item">
+      <view class="s-icon">🔌</view>
+      <text class="s-label">电源</text>
+      <text class="s-value {{myStation.psuCls}}">{{myStation.power_supply}}</text>
+    </view>
+    <view class="status-item">
+      <view class="s-icon">🧰</view>
+      <text class="s-label">万用表</text>
+      <text class="s-value {{myStation.dmmCls}}">{{myStation.multimeter}}</text>
+    </view>
+    <view class="status-item">
+      <view class="s-icon">⚠️</view>
+      <text class="s-label">异常</text>
+      <text class="s-value {{myStation.abnCls}}">{{myStation.has_abnormality}}</text>
+    </view>
+  </view>
+</view>
+
+<view class="card">
+  <view class="card-title">🧭 快捷功能</view>
+  <view class="grid">
+    <view class="grid-item" bindtap="goCheckin">
+      <view class="bubble bubble-blue">📍</view>
+      <text>定位签到</text>
+    </view>
+    <view class="grid-item" bindtap="goStation">
+      <view class="bubble bubble-cyan">🪑</view>
+      <text>工位状态</text>
+    </view>
+    <view class="grid-item" bindtap="goImages">
+      <view class="bubble bubble-purple">📷</view>
+      <text>巡检图片</text>
+    </view>
+    <view class="grid-item" bindtap="goRecords">
+      <view class="bubble bubble-orange">📋</view>
+      <text>签到记录</text>
+    </view>
+    <view class="grid-item" bindtap="goNotices">
+      <view class="bubble bubble-green">📢</view>
+      <text>公告中心</text>
+    </view>
+    <view class="grid-item" bindtap="goRules">
+      <view class="bubble bubble-red">🛡️</view>
+      <text>安全须知</text>
+    </view>
+    <view class="grid-item" bindtap="goInstruments">
+      <view class="bubble bubble-cyan">📖</view>
+      <text>仪器说明</text>
+    </view>
+  </view>
+</view>
+
+<view class="card" wx:if="{{notices.length}}">
+  <view class="card-title">📌 最新公告<text class="more" bindtap="goNotices">全部 ›</text></view>
+  <view class="notice" wx:for="{{notices}}" wx:key="id" bindtap="goNotices">
+    <view class="notice-dot"></view>
+    <view class="notice-body">
+      <view class="notice-title">{{item.title}}</view>
+      <view class="notice-time">{{item.created_at}}</view>
+    </view>
+    <text class="notice-arrow">›</text>
+  </view>
+</view>

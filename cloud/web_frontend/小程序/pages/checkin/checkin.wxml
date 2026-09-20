@@ -1,0 +1,32 @@
+<view class="card">
+  <view class="card-title">📇 签到信息</view>
+  <view class="info-row"><view class="info-icon">👤</view><text class="info-label">姓名</text><text class="info-value">{{student.name}}</text></view>
+  <view class="info-row"><view class="info-icon">🎓</view><text class="info-label">学号</text><text class="info-value">{{student.student_id}}</text></view>
+  <view class="info-row"><view class="info-icon">🏫</view><text class="info-label">实验室</text><text class="info-value">{{student.lab || '未绑定'}}</text></view>
+  <view class="info-row"><view class="info-icon">💺</view><text class="info-label">工位号</text><text class="info-value">{{student.station_number || '未绑定'}}</text></view>
+</view>
+
+<view class="card">
+  <view class="card-title">🗺️ 当前位置</view>
+  <view class="loc-hero {{location ? '' : 'idle'}}">
+    <view class="radar">
+      <view class="radar-ring r1" wx:if="{{location}}"></view>
+      <view class="radar-ring r2" wx:if="{{location}}"></view>
+      <view class="radar-core">📍</view>
+    </view>
+    <view class="loc-main" wx:if="{{placeName || geoStatus === 'loading'}}">📍 {{placeName || '正在识别位置…'}}</view>
+    <view class="loc-coords" wx:if="{{location}}">经度 {{lngText}} · 纬度 {{latText}}</view>
+    <view class="loc-sub" wx:if="{{location && location.accuracy}}">定位精度约 {{location.accuracy}} 米</view>
+    <view class="loc-addr" wx:if="{{address}}">🏢 {{address}}</view>
+    <view class="loc-none" wx:if="{{!location}}">尚未获取定位，请点击下方按钮定位</view>
+  </view>
+  <view class="loc-btns">
+    <button class="mini-btn" bindtap="locate" loading="{{locating}}">📍 重新定位</button>
+    <button class="mini-btn" bindtap="chooseLocation">🗺️ 手动选择位置</button>
+  </view>
+</view>
+
+<view class="btn-wrap">
+  <button class="btn-primary {{submitting ? 'disabled' : ''}}" bindtap="submit" loading="{{submitting}}">✅ 立即签到</button>
+</view>
+<view class="hint">🔒 签到会记录您的位置信息，用于确认您在实验室附近</view>

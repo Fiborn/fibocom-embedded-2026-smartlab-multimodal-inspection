@@ -1,0 +1,105 @@
+/* 统计卡片 */
+.stats-card {
+  margin: 24rpx 28rpx;
+  background: linear-gradient(135deg, #3f8ae2, #7fc0f7);
+  border-radius: 28rpx;
+  display: flex;
+  padding: 36rpx 0;
+  box-shadow: 0 12rpx 28rpx rgba(63, 138, 226, 0.32);
+}
+
+.stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-icon {
+  font-size: 40rpx;
+}
+
+.stat-num {
+  color: #fff;
+  font-size: 48rpx;
+  font-weight: 700;
+  margin-top: 6rpx;
+}
+
+.stat-label {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 23rpx;
+  margin-top: 6rpx;
+}
+
+/* 时间线 */
+.timeline {
+  padding-left: 8rpx;
+}
+
+.t-item {
+  position: relative;
+  padding: 0 0 40rpx 56rpx;
+}
+
+.t-item:last-child {
+  padding-bottom: 0;
+}
+
+.t-item::after {
+  content: '';
+  position: absolute;
+  left: 11rpx;
+  top: 34rpx;
+  bottom: -6rpx;
+  width: 2rpx;
+  background: #e6ecf7;
+}
+
+.t-item:last-child::after {
+  display: none;
+}
+
+.t-dot {
+  position: absolute;
+  left: 0;
+  top: 6rpx;
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  border: 4rpx solid #fff;
+}
+
+.t-dot.ok { background: #0cae6d; box-shadow: 0 0 0 6rpx rgba(12, 174, 109, 0.15); }
+.t-dot.warn { background: #f08a24; box-shadow: 0 0 0 6rpx rgba(240, 138, 36, 0.15); }
+
+.t-time {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1b2a4a;
+}
+
+.t-place {
+  font-size: 24rpx;
+  color: #7a869e;
+  margin-top: 6rpx;
+}
+
+.t-meta {
+  display: flex;
+  align-items: center;
+  margin-top: 12rpx;
+}
+
+.t-dist {
+  font-size: 22rpx;
+  color: #98a3b8;
+  margin-left: 16rpx;
+}
+
+.t-addr {
+  font-size: 22rpx;
+  color: #98a3b8;
+  margin-top: 8rpx;
+  word-break: break-all;
+}

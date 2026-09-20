@@ -1,0 +1,2400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>实验室管理系统</title>
+    <style>
+        /* ===== 全局重置 & 变量 ===== */
+        :root {
+            --sidebar-width: 240px;
+            --sidebar-bg: #1a1d29;
+            --sidebar-hover: #242837;
+            --sidebar-active: #2a6ef5;
+            --primary: #2a6ef5;
+            --primary-light: #e8f0fe;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --success: #27ae60;
+            --info: #3498db;
+            --bg: #f0f2f5;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --text-secondary: #7f8c9b;
+            --border: #e8ecf1;
+            --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.10);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== 侧边栏 ===== */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--sidebar-bg);
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.18);
+            transition: transform var(--transition);
+        }
+        .sidebar-logo {
+            padding: 28px 22px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .sidebar-logo .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #2a6ef5, #5b9cf5);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .sidebar-logo .logo-text {
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        .sidebar-logo .logo-sub {
+            color: #8890a8;
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow-y: auto;
+        }
+        .sidebar-nav .nav-section {
+            color: #5c6278;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 16px 12px 6px;
+            font-weight: 600;
+            user-select: none;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 16px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            color: #b0b8cc;
+            font-size: 14.5px;
+            font-weight: 500;
+            transition: all var(--transition);
+            position: relative;
+            white-space: nowrap;
+            user-select: none;
+            text-decoration: none;
+        }
+        .nav-item:hover {
+            background: var(--sidebar-hover);
+            color: #e2e6f0;
+        }
+        .nav-item.active {
+            background: var(--sidebar-active);
+            color: #ffffff;
+            font-weight: 600;
+            box-shadow: 0 4px 16px rgba(42, 110, 245, 0.35);
+        }
+        .nav-item .nav-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 17px;
+            flex-shrink: 0;
+        }
+        .nav-item .badge {
+            margin-left: auto;
+            background: var(--danger);
+            color: #fff;
+            font-size: 11px;
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        .nav-item .badge.warn-badge {
+            background: var(--warning);
+            color: #1a1d29;
+        }
+
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .sidebar-footer .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .sidebar-footer .user-info:hover {
+            background: var(--sidebar-hover);
+        }
+        .sidebar-footer .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #5b9cf5, #8ab8f8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+        .sidebar-footer .user-name {
+            color: #e2e6f0;
+            font-size: 13.5px;
+            font-weight: 500;
+        }
+        .sidebar-footer .user-role {
+            color: #6b7280;
+            font-size: 11px;
+        }
+
+        /* ===== 主内容 ===== */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            min-height: 100vh;
+            padding: 28px 32px;
+            transition: margin var(--transition);
+            width: calc(100% - var(--sidebar-width));
+        }
+
+        /* ===== 页面头部 ===== */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .page-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1a1d29;
+            letter-spacing: -0.3px;
+        }
+        .page-subtitle {
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* ===== 统计卡片 ===== */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 26px;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 18px 22px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: all var(--transition);
+            border: 1px solid var(--border);
+            cursor: default;
+        }
+        .stat-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+        .stat-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .stat-icon.blue {
+            background: #e8f0fe;
+            color: #2a6ef5;
+        }
+        .stat-icon.green {
+            background: #e6f7ee;
+            color: #27ae60;
+        }
+        .stat-icon.orange {
+            background: #fef5e7;
+            color: #f39c12;
+        }
+        .stat-icon.red {
+            background: #fdecea;
+            color: #e74c3c;
+        }
+        .stat-icon.purple {
+            background: #ede7f6;
+            color: #7b1fa2;
+        }
+        .stat-icon.teal {
+            background: #e0f7fa;
+            color: #00838f;
+        }
+        .stat-info .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1d29;
+            letter-spacing: -0.5px;
+        }
+        .stat-info .stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* ===== 内容卡片 ===== */
+        .content-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+        .card-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .card-header h3 {
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+        }
+        .card-body {
+            padding: 0;
+            overflow-x: auto;
+        }
+
+        /* ===== 表格 ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            min-width: 400px;
+        }
+        table thead {
+            background: #f8f9fb;
+        }
+        table thead th {
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 600;
+            color: #5c6278;
+            font-size: 12.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            white-space: nowrap;
+            border-bottom: 2px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: #f8f9fb;
+            z-index: 2;
+        }
+        table tbody td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #f1f3f6;
+            vertical-align: middle;
+            font-size: 13.5px;
+        }
+        table tbody tr:hover {
+            background: #fafbfc;
+        }
+
+        /* ===== 状态徽章 ===== */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12.5px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+        }
+        .status-normal {
+            background: #e6f7ee;
+            color: #27ae60;
+        }
+        .status-warning {
+            background: #fef5e7;
+            color: #e67e22;
+        }
+        .status-danger {
+            background: #fdecea;
+            color: #e74c3c;
+        }
+        .status-info {
+            background: #e8f0fe;
+            color: #2a6ef5;
+        }
+        .status-idle {
+            background: #f1f3f6;
+            color: #7f8c9b;
+        }
+        .status-yes {
+            background: #fdecea;
+            color: #c0392b;
+        }
+        .status-no {
+            background: #e6f7ee;
+            color: #27ae60;
+        }
+
+        /* ===== 标签切换 ===== */
+        .tab-group {
+            display: flex;
+            gap: 4px;
+            background: #f1f3f6;
+            border-radius: 8px;
+            padding: 3px;
+        }
+        .tab-btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            background: transparent;
+            color: #5c6278;
+        }
+        .tab-btn.active-tab {
+            background: #fff;
+            color: #1a1d29;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        .tab-btn:hover:not(.active-tab) {
+            color: #1a1d29;
+        }
+
+        /* ===== 搜索框 ===== */
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8f9fb;
+            border-radius: 8px;
+            padding: 8px 14px;
+            border: 1.5px solid var(--border);
+            transition: all var(--transition);
+            flex: 1;
+            max-width: 320px;
+        }
+        .search-box:focus-within {
+            border-color: #2a6ef5;
+            box-shadow: 0 0 0 3px rgba(42, 110, 245, 0.08);
+            background: #fff;
+        }
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 13.5px;
+            width: 100%;
+            color: var(--text);
+        }
+        .search-box .search-icon {
+            color: #a0aab4;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        /* ===== 分页 ===== */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+        }
+        .pagination-btns {
+            display: flex;
+            gap: 6px;
+        }
+        .pagination-btns button {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: #fff;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all var(--transition);
+            font-weight: 500;
+        }
+        .pagination-btns button:hover {
+            background: #f0f2f5;
+        }
+        .pagination-btns button.active-page {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* ===== 按钮 ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            letter-spacing: 0.2px;
+            transition: all var(--transition);
+            white-space: nowrap;
+            text-decoration: none;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #1e5cd6;
+            box-shadow: 0 4px 14px rgba(42, 110, 245, 0.35);
+            transform: translateY(-1px);
+        }
+        .btn-outline {
+            background: #fff;
+            border: 1.5px solid var(--border);
+            color: var(--text);
+        }
+        .btn-outline:hover {
+            border-color: #c0c8d4;
+            background: #f8f9fb;
+        }
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+        .btn-edit-sm {
+            background: #fff;
+            border: 1px solid #c8d6e5;
+            color: #2a6ef5;
+            padding: 5px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .btn-edit-sm:hover {
+            background: #e8f0fe;
+            border-color: #2a6ef5;
+        }
+        .btn-danger-sm {
+            background: #fff;
+            border: 1px solid #f5c6cb;
+            color: #e74c3c;
+            padding: 5px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .btn-danger-sm:hover {
+            background: #fdecea;
+            border-color: #e74c3c;
+        }
+
+        /* ===== 模态框 ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .modal {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 28px 32px;
+            width: 90%;
+            max-width: 520px;
+            box-shadow: var(--shadow-lg);
+            animation: slideUp 0.25s ease;
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .modal h3 {
+            font-size: 19px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #4a5568;
+            letter-spacing: 0.2px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1.5px solid var(--border);
+            font-size: 14px;
+            transition: all var(--transition);
+            outline: none;
+            font-family: inherit;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #2a6ef5;
+            box-shadow: 0 0 0 3px rgba(42, 110, 245, 0.07);
+        }
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 22px;
+        }
+        .btn-cancel {
+            background: #f1f3f6;
+            color: #4a5568;
+            border: none;
+        }
+        .btn-cancel:hover {
+            background: #e2e6ec;
+        }
+
+        .panel-hidden {
+            display: none !important;
+        }
+
+        /* ===== 更新提示 ===== */
+        .update-meta {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .update-meta span {
+            background: #f1f3f6;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 18px 14px;
+            }
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            .stat-card {
+                padding: 14px 16px;
+                gap: 10px;
+            }
+            .stat-info .stat-value {
+                font-size: 20px;
+            }
+            .page-title {
+                font-size: 20px;
+            }
+            .header-actions {
+                width: 100%;
+            }
+            .search-box {
+                max-width: 100%;
+                flex: 1;
+            }
+            .tab-group {
+                flex-wrap: wrap;
+            }
+            table {
+                min-width: 400px;
+            }
+        }
+
+        /* ===== 工具类 ===== */
+        .text-muted {
+            color: var(--text-secondary);
+        }
+        .fw-600 {
+            font-weight: 600;
+        }
+        .gap-8 {
+            gap: 8px;
+        }
+        .flex-center {
+            display: flex;
+            align-items: center;
+        }
+
+        /* ===== 识别结果图库 ===== */
+        .station-filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 24px;
+            flex-wrap: wrap;
+        }
+        .station-filter-bar .filter-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-right: 4px;
+            white-space: nowrap;
+        }
+        .station-filter-btn {
+            padding: 7px 16px;
+            border-radius: 20px;
+            border: 1.5px solid var(--border);
+            background: #fff;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: #5c6278;
+            transition: all var(--transition);
+            white-space: nowrap;
+        }
+        .station-filter-btn:hover {
+            border-color: #2a6ef5;
+            color: #2a6ef5;
+            background: #e8f0fe;
+        }
+        .station-filter-btn.active-filter {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+        .station-filter-btn .filter-count {
+            font-size: 11px;
+            opacity: 0.8;
+            margin-left: 2px;
+        }
+
+        .gallery-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            padding: 8px 24px 24px;
+        }
+        .station-section {
+            background: #fff;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            animation: fadeInUp 0.3s ease;
+        }
+        .station-section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 20px;
+            background: #f8f9fb;
+            border-bottom: 1px solid var(--border);
+        }
+        .station-section-header .station-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .station-section-header .station-dot.s1 { background: #2a6ef5; }
+        .station-section-header .station-dot.s2 { background: #27ae60; }
+        .station-section-header .station-dot.s3 { background: #f39c12; }
+        .station-section-header .station-dot.s4 { background: #e74c3c; }
+        .station-section-header .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a1d29;
+        }
+        .station-section-header .section-count {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-left: auto;
+        }
+        .station-section-body {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+            padding: 16px 20px;
+        }
+        .gallery-card {
+            background: #fff;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+            transition: all var(--transition);
+            cursor: pointer;
+        }
+        .gallery-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-3px);
+        }
+        .gallery-card .card-img-wrap {
+            position: relative;
+            width: 100%;
+            padding-top: 75%;
+            background: #1a1d29;
+            overflow: hidden;
+        }
+        .gallery-card .card-img-wrap img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .gallery-card:hover .card-img-wrap img {
+            transform: scale(1.06);
+        }
+        .gallery-card .card-img-wrap .img-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity var(--transition);
+            display: flex;
+            align-items: flex-end;
+            padding: 12px 14px;
+        }
+        .gallery-card:hover .card-img-wrap .img-overlay {
+            opacity: 1;
+        }
+        .img-overlay .overlay-text {
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        .gallery-card .card-info {
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .card-info .time-text {
+            font-size: 11px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        .card-info .card-badge {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        .card-badge.latest-badge {
+            background: #e6f7ee;
+            color: #27ae60;
+        }
+        .card-badge.old-badge {
+            background: #f1f3f6;
+            color: #7f8c9b;
+        }
+        .gallery-empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+        .gallery-empty .empty-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+            opacity: 0.6;
+        }
+        .gallery-empty .empty-text {
+            font-size: 15px;
+            font-weight: 500;
+        }
+        .gallery-empty .empty-sub {
+            font-size: 13px;
+            margin-top: 6px;
+            opacity: 0.7;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== 图片预览弹窗 ===== */
+        .image-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.88);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+        .image-modal-content {
+            position: relative;
+            max-width: 92vw;
+            max-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .image-modal-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+            object-fit: contain;
+        }
+        .image-modal-content .modal-caption {
+            color: #fff;
+            margin-top: 14px;
+            font-size: 14px;
+            text-align: center;
+            opacity: 0.85;
+        }
+        .image-modal-content .modal-close-btn {
+            position: absolute;
+            top: -44px;
+            right: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+        }
+        .image-modal-content .modal-close-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+        .gallery-refresh-hint {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        /* 图片卡片删除按钮 */
+        .gallery-card .card-delete-btn {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(231, 76, 60, 0.85);
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity var(--transition), transform var(--transition);
+            z-index: 5;
+            line-height: 1;
+        }
+        .gallery-card:hover .card-delete-btn {
+            opacity: 1;
+        }
+        .gallery-card .card-delete-btn:hover {
+            background: #c0392b;
+            transform: scale(1.15);
+        }
+        .gallery-refresh-hint .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== 侧边栏 ==================== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">🧪</div>
+            <div>
+                <div class="logo-text">LabManager</div>
+                <div class="logo-sub">实验室管理系统</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">核心功能</div>
+            <div class="nav-item" data-panel="panel-users">
+                <span class="nav-icon">👥</span> 用户管理
+            </div>
+            <div class="nav-item" data-panel="panel-labs">
+                <span class="nav-icon">🔬</span> 实验室管理
+            </div>
+            <div class="nav-item active" data-panel="panel-warnings">
+                <span class="nav-icon">⚠️</span> 警告信息
+            </div>
+            <div class="nav-item" data-panel="panel-cars">
+                <span class="nav-icon">🚗</span> 小车管理
+            </div>
+            <div class="nav-item" data-panel="panel-rectify">
+                <span class="nav-icon">🛠️</span> 整改记录
+            </div>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="avatar">管</div>
+                <div>
+                    <div class="user-name">管理员</div>
+                    <div class="user-role">系统管理员</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ==================== 主内容 ==================== -->
+    <main class="main-content" id="mainContent">
+
+        <!-- ===== 用户管理面板 ===== -->
+        <div id="panel-users" class="panel panel-hidden">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">👥 用户管理</h1>
+                    <p class="page-subtitle">管理系统中的所有用户账号与权限</p>
+                </div>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" placeholder="搜索用户姓名、工位号或手机号...">
+                    </div>
+                    <button class="btn btn-primary" onclick="openModal('modal-add-user')">＋ 添加用户</button>
+                </div>
+            </div>
+            <div class="stats-row" id="userStats">
+                <div class="stat-card"><div class="stat-icon blue">👥</div><div class="stat-info"><div class="stat-value" id="statUserTotal">0</div><div class="stat-label">用户总数</div></div></div>
+                <div class="stat-card"><div class="stat-icon green">✅</div><div class="stat-info"><div class="stat-value" id="statUserActive">0</div><div class="stat-label">活跃用户</div></div></div>
+                <div class="stat-card"><div class="stat-icon red">👑</div><div class="stat-info"><div class="stat-value" id="statUserAdmin">0</div><div class="stat-label">管理员</div></div></div>
+                <div class="stat-card"><div class="stat-icon orange">⚠️</div><div class="stat-info"><div class="stat-value" id="statUserAbnormal">0</div><div class="stat-label">工位异常</div></div></div>
+            </div>
+            <div class="content-card">
+                <div class="card-header">
+                    <h3>用户列表</h3>
+                    <span class="text-muted" style="font-size:13px;" id="userRecordCount">加载中...</span>
+                </div>
+                <div class="card-body">
+                    <table>
+                        <thead><tr><th>ID</th><th>姓名</th><th>工位号</th><th>手机号</th><th>邮箱</th><th>所属实验室</th><th>状态</th><th>工位异常</th><th>创建时间</th><th>操作</th></tr></thead>
+                        <tbody id="userTableBody">
+                            <tr><td colspan="10" style="text-align:center;padding:32px;color:var(--text-secondary);">加载中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== 实验室管理面板 ===== -->
+        <div id="panel-labs" class="panel panel-hidden">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">🔬 实验室管理</h1>
+                    <p class="page-subtitle">查看与管理各实验室的运行状态</p>
+                </div>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" placeholder="搜索实验室名称...">
+                    </div>
+                    <button class="btn btn-primary" onclick="openModal('modal-add-lab')">＋ 新增实验室</button>
+                </div>
+            </div>
+            <div class="stats-row" id="labStats">
+                <div class="stat-card"><div class="stat-icon blue">🔬</div><div class="stat-info"><div class="stat-value" id="statLabTotal">0</div><div class="stat-label">实验室总数</div></div></div>
+                <div class="stat-card"><div class="stat-icon green">✅</div><div class="stat-info"><div class="stat-value" id="statLabRunning">0</div><div class="stat-label">运行中</div></div></div>
+                <div class="stat-card"><div class="stat-icon orange">🔧</div><div class="stat-info"><div class="stat-value" id="statLabMaintain">0</div><div class="stat-label">维护中</div></div></div>
+                <div class="stat-card"><div class="stat-icon red">🚫</div><div class="stat-info"><div class="stat-value" id="statLabClosed">0</div><div class="stat-label">已关闭</div></div></div>
+            </div>
+            <div class="content-card">
+                <div class="card-header"><h3>实验室列表</h3><span class="text-muted" style="font-size:13px;" id="labRecordCount">加载中...</span></div>
+                <div class="card-body">
+                    <table>
+                        <thead><tr><th>编号</th><th>实验室名称</th><th>负责人</th><th>工位数量</th><th>容纳人数</th><th>状态</th><th>操作</th></tr></thead>
+                        <tbody id="labTableBody">
+                            <tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text-secondary);">加载中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- ===== 警告信息面板 — lab_inspection001 完整版（含电源和万用表） ===== -->
+        <!-- ============================================================ -->
+        <div id="panel-warnings" class="panel">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">⚠️ 警告信息</h1>
+                    <p class="page-subtitle">实验室安全检查 · 实时工位状态</p>
+                </div>
+                <div class="header-actions">
+                    <!-- 菜单标签 -->
+                    <div class="tab-group" id="inspectionTabs">
+                        <button class="tab-btn active-tab" data-tab="tab-history">📋 历史记录</button>
+                        <button class="tab-btn" data-tab="tab-images">📷 识别实拍</button>
+                        <button class="tab-btn" data-tab="tab-guide">📖 使用指南</button>
+                    </div>
+                    <!-- 搜索框 -->
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" placeholder="请输入服务名称" id="inspectionSearch" oninput="filterTable()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 统计卡片 -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon blue">📋</div>
+                    <div class="stat-info"><div class="stat-value" id="statTotal">--</div><div class="stat-label">总检查记录</div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">✅</div>
+                    <div class="stat-info"><div class="stat-value" id="statNormal">--</div><div class="stat-label">正常工位</div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">⚠️</div>
+                    <div class="stat-info"><div class="stat-value" id="statAbnormal">--</div><div class="stat-label">异常工位</div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red">🔌</div>
+                    <div class="stat-info"><div class="stat-value" id="statMissing">--</div><div class="stat-label">仪器缺失</div></div>
+                </div>
+            </div>
+
+            <!-- ===== 识别结果图库（tab-images） ===== -->
+            <div id="section-images" class="content-card" style="display:none;">
+                <div class="card-header">
+                    <h3>📷 工位识别实拍结果</h3>
+                    <div class="gallery-refresh-hint">
+                        <span class="live-dot"></span>
+                        <span>实时更新</span>
+                        <span class="text-muted" style="font-size:12px;" id="imageCount">共 0 张</span>
+                        <button class="btn btn-outline btn-sm" onclick="refreshStationImages()">🔄 刷新</button>
+                        <button class="btn btn-outline btn-sm" style="color:var(--danger);border-color:var(--danger);" onclick="deleteAllStationImages()">🗑 清空全部</button>
+                    </div>
+                </div>
+                <!-- 工位筛选栏 -->
+                <div class="station-filter-bar" id="stationFilterBar">
+                    <span class="filter-label">🔍 筛选工位：</span>
+                    <button class="station-filter-btn active-filter" data-filter="all">全部</button>
+                </div>
+                <div class="card-body" style="padding:0;">
+                    <div class="gallery-grid" id="imageGallery">
+                        <div class="gallery-empty">
+                            <div class="empty-icon">📷</div>
+                            <div class="empty-text">暂无识别结果图</div>
+                            <div class="empty-sub">巡检完成后将在此显示工位实拍结果</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据表格 -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h3 id="tableTitle">📊 工位检查明细</h3>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <span class="text-muted" style="font-size:13px;" id="recordCount">共 0 条记录</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table id="inspectionTable">
+                        <thead>
+                            <tr>
+                                <th>工位编号</th>
+                                <th>椅子状态</th>
+                                <th>示波器</th>
+                                <th>信号发生器</th>
+                                <th>电源</th>
+                                <th>万用表</th>
+                                <th>仪器缺失</th>
+                                <th>杂乱</th>
+                                <th>遗落物品</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- 由 JavaScript 动态生成 -->
+                        </tbody>
+                    </table>
+                    <div class="pagination">
+                        <div class="pagination-btns">
+                            <button>←</button>
+                            <button class="active-page">1</button>
+                            <button>→</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- ===== 小车管理面板 ===== -->
+        <!-- ============================================================ -->
+        <div id="panel-cars" class="panel panel-hidden">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">🚗 小车管理</h1>
+                    <p class="page-subtitle">管理实验室导航小车 · 巡检控制</p>
+                </div>
+                <div class="header-actions">
+                    <span class="text-muted" style="font-size:12px;" id="inspectionStatus"></span>
+                </div>
+            </div>
+
+            <div class="stats-row" id="carStats">
+                <div class="stat-card"><div class="stat-icon blue">🚗</div><div class="stat-info"><div class="stat-value" id="statCarTotal">0</div><div class="stat-label">小车总数</div></div></div>
+                <div class="stat-card"><div class="stat-icon green">▶</div><div class="stat-info"><div class="stat-value" id="statCarRunning">0</div><div class="stat-label">运行中</div></div></div>
+                <div class="stat-card"><div class="stat-icon orange">⏳</div><div class="stat-info"><div class="stat-value" id="statCarIdle">0</div><div class="stat-label">空闲中</div></div></div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-header"><h3>小车列表</h3><span class="text-muted" style="font-size:13px;" id="carRecordCount">加载中...</span></div>
+                <div class="card-body">
+                    <table>
+                        <thead><tr><th>编号</th><th>名称</th><th>型号</th><th>状态</th><th>巡检控制</th><th>操作</th></tr></thead>
+                        <tbody id="carTableBody">
+                            <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-secondary);">加载中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== 整改记录面板 ===== -->
+        <div id="panel-rectify" class="panel panel-hidden">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">🛠️ 整改记录</h1>
+                    <p class="page-subtitle">学生提交的工位异常整改结果与现场照片</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline btn-sm" onclick="loadRectifications()">🔄 刷新</button>
+                </div>
+            </div>
+            <div class="stats-row" id="rectifyStats">
+                <div class="stat-card"><div class="stat-icon blue">🛠️</div><div class="stat-info"><div class="stat-value" id="statRectifyTotal">0</div><div class="stat-label">整改总数</div></div></div>
+                <div class="stat-card"><div class="stat-icon green">✅</div><div class="stat-info"><div class="stat-value" id="statRectifyToday">0</div><div class="stat-label">今日整改</div></div></div>
+            </div>
+            <div class="content-card">
+                <div class="card-header"><h3>整改记录列表</h3><span class="text-muted" style="font-size:13px;" id="rectifyRecordCount">加载中...</span></div>
+                <div class="card-body">
+                    <table>
+                        <thead><tr><th>ID</th><th>学号</th><th>姓名</th><th>实验室</th><th>工位号</th><th>异常描述</th><th>整改照片</th><th>提交时间</th><th>操作</th></tr></thead>
+                        <tbody id="rectifyTableBody">
+                            <tr><td colspan="9" style="text-align:center;padding:32px;color:var(--text-secondary);">加载中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ==================== 图片预览弹窗 ==================== -->
+    <div id="imagePreviewModal" class="image-modal-overlay panel-hidden" onclick="closeImagePreview(event)">
+        <div class="image-modal-content">
+            <button class="modal-close-btn" onclick="document.getElementById('imagePreviewModal').classList.add('panel-hidden')">✕</button>
+            <img id="imagePreviewImg" src="" alt="识别结果图" />
+            <div class="modal-caption" id="imagePreviewCaption"></div>
+        </div>
+    </div>
+
+    <!-- ==================== 模态框 ==================== -->
+    <!-- 添加/编辑用户 -->
+    <div id="modal-add-user" class="modal-overlay panel-hidden">
+        <div class="modal">
+            <h3 id="userModalTitle">➕ 添加新用户</h3>
+            <input type="hidden" id="userEditId">
+            <div class="form-group"><label>姓名</label><input type="text" id="userName" placeholder="请输入姓名"></div>
+            <div class="form-group"><label>工位号</label><input type="text" id="userStationNumber" placeholder="请输入工位号"></div>
+            <div class="form-group"><label>手机号</label><input type="text" id="userPhone" placeholder="请输入手机号"></div>
+            <div class="form-group"><label>邮箱</label><input type="email" id="userEmail" placeholder="请输入邮箱"></div>
+            <div class="form-group"><label>角色</label><select id="userRole"><option>学生</option><option>研究员</option><option>工程师</option><option>教授</option><option>系统管理员</option></select></div>
+            <div class="form-group"><label>所属实验室</label><input type="text" id="userLab" placeholder="请输入实验室名称"></div>
+            <div class="form-group"><label>状态</label><select id="userStatus"><option>活跃</option><option>禁用</option></select></div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal('modal-add-user')">取消</button>
+                <button class="btn btn-primary" id="btnUserSubmit">确认添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加/编辑实验室 -->
+    <div id="modal-add-lab" class="modal-overlay panel-hidden">
+        <div class="modal">
+            <h3 id="labModalTitle">🔬 新增实验室</h3>
+            <input type="hidden" id="labEditId">
+            <div class="form-group"><label>实验室编号</label><input type="text" id="labCode" placeholder="如 LAB-01"></div>
+            <div class="form-group"><label>实验室名称</label><input type="text" id="labName" placeholder="请输入实验室名称"></div>
+            <div class="form-group"><label>负责人</label><input type="text" id="labManager" placeholder="请输入负责人姓名"></div>
+            <div class="form-group"><label>工位数量</label><input type="number" id="labStationCount" placeholder="请输入工位数量" min="0"></div>
+            <div class="form-group"><label>容纳人数</label><input type="number" id="labCapacity" placeholder="请输入容纳人数" min="1"></div>
+            <div class="form-group"><label>状态</label><select id="labStatus"><option>运行中</option><option>维护中</option><option>已关闭</option></select></div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal('modal-add-lab')">取消</button>
+                <button class="btn btn-primary" id="btnLabSubmit">确认添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加/编辑小车 -->
+    <div id="modal-add-car" class="modal-overlay panel-hidden">
+        <div class="modal">
+            <h3 id="carModalTitle">🚗 注册新小车</h3>
+            <input type="hidden" id="carEditId">
+            <div class="form-group"><label>小车编号</label><input type="text" id="carNumber" placeholder="请输入小车编号"></div>
+            <div class="form-group"><label>小车名称</label><input type="text" id="carName" placeholder="请输入小车名称"></div>
+            <div class="form-group"><label>型号</label><select id="carModel"><option>X5</option><option>X500-Pro</option><option>X500-Lite</option><option>X800-Max</option></select></div>
+            <div class="form-group"><label>状态</label><select id="carStatus"><option>空闲中</option><option>运行中</option><option>维护中</option></select></div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal('modal-add-car')">取消</button>
+                <button class="btn btn-primary" id="btnCarSubmit">确认注册</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== JavaScript ==================== -->
+    <script>
+        const API_BASE = 'http://localhost:3000/api';
+
+        // ============================================================
+        // 1. 全局数据
+        // ============================================================
+        let usersData = [];
+        let labsData = [];
+        let carsData = [];
+        let carShadowStatus = null;  // [已废弃] 改用 carLocalStatus
+        let carLocalStatus = '空闲中';  // 本地小车状态：空闲中 / 运行中
+        let stationStatusData = [];   // IoTDA 工位实时状态，用于与用户工位交叉匹配
+        let stationAbnormalMap = {};  // 持久化工位异常状态：{ "S-1": { has_abnormality, ... } }，异常后保持直到下次数据刷新
+        let inspectionData = [];
+        let historyData = [];
+        let currentMode = 'history';
+        let stationImages = [];        // 识别结果图列表
+        let lastImageCount = 0;        // 用于判断是否有新图
+
+        // ============================================================
+        // 2. 用户管理 CRUD
+        // ============================================================
+        async function loadUsers() {
+            try {
+                const resp = await fetch(`${API_BASE}/users`);
+                usersData = await resp.json();
+                renderUserTable();
+                updateUserStats();
+            } catch (err) {
+                console.error('加载用户失败:', err);
+                document.getElementById('userTableBody').innerHTML =
+                    '<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--danger);">加载失败，请确保服务器已启动</td></tr>';
+            }
+        }
+
+        // 从工位号字符串中提取数字 ID（如 "S-01"→1, "S-1"→1, "01"→1, "1"→1）
+        function parseStationNumber(stationNum) {
+            if (!stationNum) return null;
+            const match = stationNum.match(/\d+/);
+            return match ? parseInt(match[0]) : null;
+        }
+
+        function renderUserTable() {
+            const tbody = document.getElementById('userTableBody');
+            document.getElementById('userRecordCount').textContent = `共 ${usersData.length} 条记录`;
+            if (usersData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:32px;color:var(--text-secondary);">暂无用户数据</td></tr>';
+                return;
+            }
+            tbody.innerHTML = usersData.map(u => {
+                const statusCls = u.status === '活跃' ? 'status-normal' : 'status-danger';
+                const stationNumber = escHtml(u.station_number || '');
+                const phone = escHtml(u.phone || '');
+                const email = escHtml(u.email || '');
+                // 根据持久化异常状态判断工位异常（异常后保持直到 IoTDA 再次推送该工位数据）
+                let abnormalCell = '<span class="status-badge status-idle">—</span>';
+                if (stationNumber) {
+                    const numId = parseStationNumber(stationNumber);
+                    const stationKey = `S-${numId}`;
+                    const stationInfo = stationAbnormalMap[stationKey];
+                    if (stationInfo) {
+                        if (stationInfo.has_abnormality === '是') {
+                            const details = [];
+                            if (stationInfo.chair_status === '未归位') details.push('椅子未归位');
+                            if (stationInfo.oscilloscope === '异常') details.push('示波器异常');
+                            if (stationInfo.siggen === '异常') details.push('信号发生器异常');
+                            if (stationInfo.power_supply === '异常') details.push('电源异常');
+                            if (stationInfo.multimeter === '异常') details.push('万用表异常');
+                            if (stationInfo.has_mess === '是') details.push('有杂物');
+                            if (stationInfo.instrument_missing === '是') details.push('仪器缺失');
+                            const title = details.length > 0 ? details.join('、') : '工位存在异常';
+                            abnormalCell = `<span class="status-badge status-danger" title="${title}">⚠️ 异常</span>`;
+                        } else {
+                            abnormalCell = '<span class="status-badge status-normal">✅ 正常</span>';
+                        }
+                    } else {
+                        abnormalCell = '<span class="status-badge status-warning">⏳ 等待数据</span>';
+                    }
+                }
+                return `<tr>
+                    <td>${u.id}</td>
+                    <td><strong>${escHtml(u.name)}</strong></td>
+                    <td>${stationNumber || '—'}</td>
+                    <td>${phone || '—'}</td>
+                    <td>${email || '—'}</td>
+                    <td>${escHtml(u.lab)}</td>
+                    <td><span class="status-badge ${statusCls}">${escHtml(u.status)}</span></td>
+                    <td>${abnormalCell}</td>
+                    <td>${escHtml(u.created_at)}</td>
+                    <td>
+                        <button class="btn-edit-sm" onclick="editUser(${u.id})">✏️ 编辑</button>
+                        <button class="btn-danger-sm" onclick="deleteUser(${u.id},'${escHtml(u.name)}')">🗑 删除</button>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        function updateUserStats() {
+            document.getElementById('statUserTotal').textContent = usersData.length;
+            document.getElementById('statUserActive').textContent = usersData.filter(u => u.status === '活跃').length;
+            document.getElementById('statUserAdmin').textContent = usersData.filter(u => u.role === '系统管理员').length;
+            // 根据持久化异常状态统计工位异常用户数
+            document.getElementById('statUserAbnormal').textContent = usersData.filter(u => {
+                if (!u.station_number) return false;
+                const numId = parseStationNumber(u.station_number);
+                const info = stationAbnormalMap[`S-${numId}`];
+                return info && info.has_abnormality === '是';
+            }).length;
+        }
+
+        async function saveUser() {
+            const id = document.getElementById('userEditId').value;
+            const data = {
+                name: document.getElementById('userName').value.trim(),
+                station_number: document.getElementById('userStationNumber').value.trim(),
+                phone: document.getElementById('userPhone').value.trim(),
+                email: document.getElementById('userEmail').value.trim(),
+                role: document.getElementById('userRole').value,
+                lab: document.getElementById('userLab').value.trim(),
+                status: document.getElementById('userStatus').value,
+            };
+            if (!data.name) return alert('❌ 姓名为必填项');
+
+            try {
+                const url = id ? `${API_BASE}/users/${id}` : `${API_BASE}/users`;
+                const method = id ? 'PUT' : 'POST';
+                const resp = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+                const result = await resp.json();
+                if (!resp.ok) throw new Error(result.error);
+                closeModal('modal-add-user');
+                await loadUsers();
+                alert(id ? '✅ 用户更新成功' : '✅ 用户添加成功');
+            } catch (err) {
+                alert('❌ 操作失败: ' + err.message);
+            }
+        }
+
+        function editUser(id) {
+            const user = usersData.find(u => u.id === id);
+            if (!user) return;
+            document.getElementById('userEditId').value = user.id;
+            document.getElementById('userName').value = user.name;
+            document.getElementById('userStationNumber').value = user.station_number || '';
+            document.getElementById('userPhone').value = user.phone || '';
+            document.getElementById('userEmail').value = user.email || '';
+            document.getElementById('userRole').value = user.role;
+            document.getElementById('userLab').value = user.lab;
+            document.getElementById('userStatus').value = user.status;
+            document.getElementById('userModalTitle').textContent = '✏️ 编辑用户';
+            document.getElementById('btnUserSubmit').textContent = '保存修改';
+            openModal('modal-add-user');
+        }
+
+        async function deleteUser(id, name) {
+            if (!confirm(`确定要删除用户「${name}」吗？此操作不可恢复。`)) return;
+            try {
+                const resp = await fetch(`${API_BASE}/users/${id}`, { method: 'DELETE' });
+                if (!resp.ok) { const r = await resp.json(); throw new Error(r.error); }
+                await loadUsers();
+                alert('✅ 用户已删除');
+            } catch (err) {
+                alert('❌ 删除失败: ' + err.message);
+            }
+        }
+
+        function resetUserModal() {
+            document.getElementById('userEditId').value = '';
+            document.getElementById('userName').value = '';
+            document.getElementById('userStationNumber').value = '';
+            document.getElementById('userPhone').value = '';
+            document.getElementById('userEmail').value = '';
+            document.getElementById('userRole').value = '学生';
+            document.getElementById('userLab').value = '';
+            document.getElementById('userStatus').value = '活跃';
+            document.getElementById('userModalTitle').textContent = '➕ 添加新用户';
+            document.getElementById('btnUserSubmit').textContent = '确认添加';
+        }
+
+        // ============================================================
+        // 3. 实验室管理 CRUD
+        // ============================================================
+        async function loadLabs() {
+            try {
+                const resp = await fetch(`${API_BASE}/labs`);
+                labsData = await resp.json();
+                renderLabTable();
+                updateLabStats();
+            } catch (err) {
+                console.error('加载实验室失败:', err);
+                document.getElementById('labTableBody').innerHTML =
+                    '<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--danger);">加载失败</td></tr>';
+            }
+        }
+
+        function renderLabTable() {
+            const tbody = document.getElementById('labTableBody');
+            document.getElementById('labRecordCount').textContent = `共 ${labsData.length} 条记录`;
+            if (labsData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text-secondary);">暂无实验室数据</td></tr>';
+                return;
+            }
+            const statusMap = { '运行中': 'status-normal', '维护中': 'status-warning', '已关闭': 'status-danger' };
+            tbody.innerHTML = labsData.map(l => {
+                const cls = statusMap[l.status] || 'status-idle';
+                return `<tr>
+                    <td>${escHtml(l.lab_code)}</td>
+                    <td><strong>${escHtml(l.name)}</strong></td>
+                    <td>${escHtml(l.manager)}</td>
+                    <td>${l.station_count}</td>
+                    <td>${l.capacity}</td>
+                    <td><span class="status-badge ${cls}">${escHtml(l.status)}</span></td>
+                    <td>
+                        <button class="btn-edit-sm" onclick="editLab(${l.id})">✏️ 编辑</button>
+                        <button class="btn-danger-sm" onclick="deleteLab(${l.id},'${escHtml(l.name)}')">🗑 删除</button>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        function updateLabStats() {
+            document.getElementById('statLabTotal').textContent = labsData.length;
+            document.getElementById('statLabRunning').textContent = labsData.filter(l => l.status === '运行中').length;
+            document.getElementById('statLabMaintain').textContent = labsData.filter(l => l.status === '维护中').length;
+            document.getElementById('statLabClosed').textContent = labsData.filter(l => l.status === '已关闭').length;
+        }
+
+        async function saveLab() {
+            const id = document.getElementById('labEditId').value;
+            const data = {
+                lab_code: document.getElementById('labCode').value.trim(),
+                name: document.getElementById('labName').value.trim(),
+                manager: document.getElementById('labManager').value.trim(),
+                station_count: parseInt(document.getElementById('labStationCount').value) || 0,
+                capacity: parseInt(document.getElementById('labCapacity').value) || 0,
+                status: document.getElementById('labStatus').value,
+            };
+            if (!data.name) return alert('❌ 实验室名称为必填项');
+
+            try {
+                const url = id ? `${API_BASE}/labs/${id}` : `${API_BASE}/labs`;
+                const method = id ? 'PUT' : 'POST';
+                const resp = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+                const result = await resp.json();
+                if (!resp.ok) throw new Error(result.error);
+                closeModal('modal-add-lab');
+                await loadLabs();
+                alert(id ? '✅ 实验室更新成功' : '✅ 实验室添加成功');
+            } catch (err) {
+                alert('❌ 操作失败: ' + err.message);
+            }
+        }
+
+        function editLab(id) {
+            const lab = labsData.find(l => l.id === id);
+            if (!lab) return;
+            document.getElementById('labEditId').value = lab.id;
+            document.getElementById('labCode').value = lab.lab_code;
+            document.getElementById('labName').value = lab.name;
+            document.getElementById('labManager').value = lab.manager;
+            document.getElementById('labStationCount').value = lab.station_count;
+            document.getElementById('labCapacity').value = lab.capacity;
+            document.getElementById('labStatus').value = lab.status;
+            document.getElementById('labModalTitle').textContent = '✏️ 编辑实验室';
+            document.getElementById('btnLabSubmit').textContent = '保存修改';
+            openModal('modal-add-lab');
+        }
+
+        async function deleteLab(id, name) {
+            if (!confirm(`确定要删除实验室「${name}」吗？此操作不可恢复。`)) return;
+            try {
+                const resp = await fetch(`${API_BASE}/labs/${id}`, { method: 'DELETE' });
+                if (!resp.ok) { const r = await resp.json(); throw new Error(r.error); }
+                await loadLabs();
+                alert('✅ 实验室已删除');
+            } catch (err) {
+                alert('❌ 删除失败: ' + err.message);
+            }
+        }
+
+        function resetLabModal() {
+            document.getElementById('labEditId').value = '';
+            document.getElementById('labCode').value = '';
+            document.getElementById('labName').value = '';
+            document.getElementById('labManager').value = '';
+            document.getElementById('labStationCount').value = '';
+            document.getElementById('labCapacity').value = '';
+            document.getElementById('labStatus').value = '运行中';
+            document.getElementById('labModalTitle').textContent = '🔬 新增实验室';
+            document.getElementById('btnLabSubmit').textContent = '确认添加';
+        }
+
+        // ============================================================
+        // 4. 小车管理 CRUD
+        // ============================================================
+        async function loadCars() {
+            try {
+                const resp = await fetch(`${API_BASE}/cars`);
+                carsData = await resp.json();
+                renderCarTable();
+                updateCarStats();
+            } catch (err) {
+                console.error('加载小车失败:', err);
+                document.getElementById('carTableBody').innerHTML =
+                    '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--danger);">加载失败</td></tr>';
+            }
+        }
+
+        function renderCarTable() {
+            const tbody = document.getElementById('carTableBody');
+            const count = carsData.length;
+            document.getElementById('carRecordCount').textContent = `共 ${count} 条记录`;
+            if (count === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-secondary);">暂无小车数据</td></tr>';
+                return;
+            }
+            const statusMap = { '运行中': 'status-normal', '空闲中': 'status-info', '维护中': 'status-warning' };
+            tbody.innerHTML = carsData.map(c => {
+                const status = carLocalStatus;
+                const cls = statusMap[status] || 'status-idle';
+                const ctrlBtns = `<button class="btn-edit-sm" onclick="startInspection()" style="white-space:nowrap;background:#27ae60;color:#fff;border-color:#27ae60;margin-right:4px;">▶ 开始巡检</button>
+                    <button class="btn-danger-sm" onclick="stopInspection()" style="white-space:nowrap;">⏹ 停止巡检</button>`;
+                return `<tr>
+                    <td><strong>${escHtml(c.car_number)}</strong></td>
+                    <td>${escHtml(c.name)}</td>
+                    <td>${escHtml(c.model)}</td>
+                    <td><span class="status-badge ${cls}">${escHtml(status)}</span></td>
+                    <td>${ctrlBtns}</td>
+                    <td>
+                        <button class="btn-edit-sm" onclick="editCar(${c.id})">✏️ 编辑</button>
+                        <button class="btn-danger-sm" onclick="deleteCar(${c.id},'${escHtml(c.name)}')">🗑 删除</button>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        function updateCarStats() {
+            const total = carsData.length;
+            const running = carLocalStatus === '运行中' ? total : 0;
+            const idle = carLocalStatus === '空闲中' ? total : 0;
+            document.getElementById('statCarTotal').textContent = total;
+            document.getElementById('statCarRunning').textContent = running;
+            document.getElementById('statCarIdle').textContent = idle;
+        }
+
+        async function saveCar() {
+            const id = document.getElementById('carEditId').value;
+            const data = {
+                car_number: document.getElementById('carNumber').value.trim(),
+                name: document.getElementById('carName').value.trim(),
+                model: document.getElementById('carModel').value,
+                status: document.getElementById('carStatus').value,
+            };
+            if (!data.name) return alert('❌ 小车名称为必填项');
+
+            try {
+                const url = id ? `${API_BASE}/cars/${id}` : `${API_BASE}/cars`;
+                const method = id ? 'PUT' : 'POST';
+                const resp = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+                const result = await resp.json();
+                if (!resp.ok) throw new Error(result.error);
+                closeModal('modal-add-car');
+                await loadCars();
+                alert(id ? '✅ 小车更新成功' : '✅ 小车注册成功');
+            } catch (err) {
+                alert('❌ 操作失败: ' + err.message);
+            }
+        }
+
+        function editCar(id) {
+            const car = carsData.find(c => c.id === id);
+            if (!car) return;
+            document.getElementById('carEditId').value = car.id;
+            document.getElementById('carNumber').value = car.car_number;
+            document.getElementById('carName').value = car.name;
+            document.getElementById('carModel').value = car.model;
+            document.getElementById('carStatus').value = car.status;
+            document.getElementById('carModalTitle').textContent = '✏️ 编辑小车';
+            document.getElementById('btnCarSubmit').textContent = '保存修改';
+            openModal('modal-add-car');
+        }
+
+        async function deleteCar(id, name) {
+            if (!confirm(`确定要删除小车「${name}」吗？此操作不可恢复。`)) return;
+            try {
+                const resp = await fetch(`${API_BASE}/cars/${id}`, { method: 'DELETE' });
+                if (!resp.ok) { const r = await resp.json(); throw new Error(r.error); }
+                await loadCars();
+                alert('✅ 小车已删除');
+            } catch (err) {
+                alert('❌ 删除失败: ' + err.message);
+            }
+        }
+
+        function resetCarModal() {
+            document.getElementById('carEditId').value = '';
+            document.getElementById('carNumber').value = '';
+            document.getElementById('carName').value = '';
+            document.getElementById('carModel').value = 'X5';
+            document.getElementById('carStatus').value = '空闲中';
+            document.getElementById('carModalTitle').textContent = '🚗 注册新小车';
+            document.getElementById('btnCarSubmit').textContent = '确认注册';
+        }
+
+        // ============================================================
+        // 4-extra. 巡检启停控制
+        // ============================================================
+        let inspectionRunning = false;
+
+        async function startInspection() {
+            const statusEl = document.getElementById('inspectionStatus');
+            statusEl.textContent = '⏳ 正在发车...';
+            statusEl.style.color = 'var(--warning)';
+
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000);
+                const resp = await fetch(`${API_BASE}/start-inspection`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ station_id: 1 }),
+                    signal: controller.signal,
+                });
+                clearTimeout(timeoutId);
+                const result = await resp.json();
+                if (result.success) {
+                    carLocalStatus = '运行中';
+                    statusEl.textContent = '✅ 巡检运行中';
+                    statusEl.style.color = 'var(--success)';
+                    renderCarTable();
+                    updateCarStats();
+                } else {
+                    statusEl.textContent = '❌ ' + (result.message || '发车失败');
+                    statusEl.style.color = 'var(--danger)';
+                    alert('❌ 发车失败: ' + (result.message || '未知错误'));
+                }
+            } catch (err) {
+                statusEl.textContent = '⚠️ 无法连接机器人';
+                statusEl.style.color = 'var(--danger)';
+                alert('❌ 无法连接机器人: ' + err.message);
+            }
+        }
+
+        async function stopInspection() {
+            const statusEl = document.getElementById('inspectionStatus');
+            statusEl.textContent = '⏳ 正在停车...';
+            statusEl.style.color = 'var(--warning)';
+
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000);
+                const resp = await fetch(`${API_BASE}/stop-inspection`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    signal: controller.signal,
+                });
+                clearTimeout(timeoutId);
+                const result = await resp.json();
+                if (result.success) {
+                    carLocalStatus = '空闲中';
+                    statusEl.textContent = '⏹ 巡检已停止';
+                    statusEl.style.color = 'var(--text-secondary)';
+                    renderCarTable();
+                    updateCarStats();
+                } else {
+                    statusEl.textContent = '⚠️ ' + (result.message || '停车失败');
+                    statusEl.style.color = 'var(--warning)';
+                    await loadCars();
+                }
+            } catch (err) {
+                statusEl.textContent = '⚠️ 无法连接机器人';
+                statusEl.style.color = 'var(--danger)';
+                alert('❌ 无法连接机器人: ' + err.message);
+            }
+        }
+
+        // ============================================================
+        // 5. IoTDA 设备状态（保持不变）
+        // ============================================================
+        async function fetchDeviceStatus() {
+            try {
+                const resp = await fetch(`${API_BASE}/device-status`);
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                const result = await resp.json();
+                // 兼容新旧响应格式: 新格式 { unchanged, data }, 旧格式直接是数组
+                const unchanged = result.unchanged === true;
+                const newData = Array.isArray(result) ? result : (result.data || []);
+                // allStations 包含全部缓存工位，用于用户管理面板
+                const allStations = result.allStations || newData;
+                // 始终更新本地数据缓存
+                const wasEmpty = inspectionData.length === 0;
+                inspectionData = newData;           // 实时展示：仅本次上报的工位
+                stationStatusData = allStations;    // 用户管理：全部缓存工位
+                // 用全部缓存更新持久化异常状态
+                allStations.forEach(s => {
+                    stationAbnormalMap[s.station_id] = {
+                        has_abnormality: s.has_abnormality,
+                        chair_status: s.chair_status,
+                        oscilloscope: s.oscilloscope,
+                        siggen: s.siggen,
+                        power_supply: s.power_supply,
+                        multimeter: s.multimeter,
+                        has_mess: s.has_mess,
+                        instrument_missing: s.instrument_missing,
+                    };
+                });
+                if (currentMode === 'history') {
+                    // 新数据到达时立即刷新一次；防抖留存完成后的记录由下方 3 秒定时轮询兜底展示
+                    if (!unchanged || wasEmpty) fetchHistory();
+                } else if (unchanged && !wasEmpty) {
+                    // 数据无变化且非首次加载，仅更新时间戳，不重新渲染表格
+                    console.log('📡 工位数据无变化，跳过渲染');
+                } else {
+                    updateStats(inspectionData);
+                    renderTable(inspectionData);  // 渲染实时「工位检查明细」表格
+                }
+                // 如果用户管理面板可见，同步刷新工位异常状态
+                const userPanel = document.getElementById('panel-users');
+                if (userPanel && !userPanel.classList.contains('panel-hidden')) {
+                    renderUserTable();
+                    updateUserStats();
+                }
+            } catch (err) {
+                console.error('获取设备数据失败:', err.message);
+            }
+        }
+
+        async function fetchHistory() {
+            try {
+                const resp = await fetch(`${API_BASE}/device-history`);
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                historyData = await resp.json();
+                renderTable(historyData);
+                updateHistoryStats(historyData);
+            } catch (err) {
+                console.error('获取历史记录失败:', err.message);
+                renderTable([]);
+            }
+        }
+
+        function updateHistoryStats(data) {
+            setEl('statTotal', data.length);
+            setEl('statNormal', data.filter(i => i.has_abnormality === '否').length);
+            setEl('statAbnormal', data.filter(i => i.has_abnormality === '是').length);
+            setEl('statMissing', data.filter(i => i.instrument_missing === '是').length);
+        }
+
+        function updateStats(data) {
+            setEl('statTotal', data.length);
+            setEl('statNormal', data.filter(i => i.has_abnormality === '否').length);
+            setEl('statAbnormal', data.filter(i => i.has_abnormality === '是').length);
+            setEl('statMissing', data.filter(i => i.instrument_missing === '是').length);
+        }
+
+        function setEl(id, val) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val;
+        }
+
+        setInterval(fetchDeviceStatus, 5000);
+        // 历史记录页单独每 3 秒轮询一次（只查 MySQL，开销小），后端防抖写库后能快速显示
+        setInterval(() => { if (currentMode === 'history') fetchHistory(); }, 3000);
+
+        // ============================================================
+        // 6. 渲染检测表格
+        // ============================================================
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            if (!tbody) return;
+            const isHistory = currentMode === 'history';
+            const tableTitle = document.getElementById('tableTitle');
+            const recordCountSpan = document.getElementById('recordCount');
+
+            if (tableTitle) tableTitle.textContent = isHistory ? '📋 检测历史记录' : '📊 工位检查明细';
+
+            if (data.length === 0) {
+                const colSpan = 9;
+                const msg = isHistory ? '📋 暂无历史检测记录' : '🔍 没有匹配的记录';
+                tbody.innerHTML = `<tr><td colspan="${colSpan}" style="text-align:center;padding:32px;color:var(--text-secondary);">${msg}</td></tr>`;
+                if (recordCountSpan) recordCountSpan.textContent = '共 0 条记录';
+                return;
+            }
+            let html = '';
+            data.forEach(item => {
+                const chairBadge = getBadge(item.chair_status);
+                const scopeBadge = getBadge(item.oscilloscope);
+                const siggenBadge = getBadge(item.siggen);
+                const powerBadge = getBadge(item.power_supply);
+                const meterBadge = getBadge(item.multimeter);
+                const missingBadge = item.instrument_missing === '是'
+                    ? '<span class="status-badge status-yes">是</span>'
+                    : '<span class="status-badge status-no">否</span>';
+                const messBadge = item.has_mess === '是'
+                    ? '<span class="status-badge status-yes">是</span>'
+                    : '<span class="status-badge status-no">否</span>';
+                html += `<tr>
+                    <td><strong>${item.station_id}</strong></td>
+                    <td>${chairBadge}</td><td>${scopeBadge}</td><td>${siggenBadge}</td>
+                    <td>${powerBadge}</td><td>${meterBadge}</td>
+                    <td>${missingBadge}</td><td>${messBadge}</td>
+                    <td style="max-width:200px;font-size:13px;color:var(--text-secondary);">${item.has_mass_detail || ''}</td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+            if (recordCountSpan) recordCountSpan.textContent = `共 ${data.length} 条记录`;
+        }
+
+        function getBadge(status) {
+            const map = {
+                '正常': 'status-normal', '异常': 'status-danger', '缺失': 'status-danger',
+                '损坏': 'status-danger', '维修中': 'status-warning',
+                '归位': 'status-normal', '未归位': 'status-danger', '—': 'status-idle'
+            };
+            const cls = map[status] || 'status-idle';
+            return `<span class="status-badge ${cls}">${status}</span>`;
+        }
+
+        function filterTable() {
+            const input = document.getElementById('inspectionSearch');
+            const keyword = input.value.trim().toLowerCase();
+            const source = currentMode === 'history' ? historyData : inspectionData;
+            if (!keyword) { renderTable(source); return; }
+            const filtered = source.filter(item =>
+                (item.station_id && item.station_id.toLowerCase().includes(keyword)) ||
+                (item.chair_status && item.chair_status.includes(keyword)) ||
+                (item.oscilloscope && item.oscilloscope.includes(keyword)) ||
+                (item.siggen && item.siggen.includes(keyword)) ||
+                (item.power_supply && item.power_supply.includes(keyword)) ||
+                (item.multimeter && item.multimeter.includes(keyword)) ||
+                (item.instrument_missing && item.instrument_missing.includes(keyword)) ||
+                (item.has_mess && item.has_mess.includes(keyword)) ||
+                (item.has_mass_detail && item.has_mass_detail.toLowerCase().includes(keyword))
+            );
+            renderTable(filtered);
+        }
+
+        // ============================================================
+        // 7. 标签切换
+        // ============================================================
+        document.querySelectorAll('#inspectionTabs .tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const parent = this.closest('.tab-group');
+                parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab'));
+                this.classList.add('active-tab');
+                const tabId = this.getAttribute('data-tab');
+                // 切换各区域的显示/隐藏
+                const tableCard = document.querySelector('#panel-warnings .content-card:not(#section-images)');
+                const imageSection = document.getElementById('section-images');
+                const statsRow = document.querySelector('#panel-warnings .stats-row');
+                const searchBox = document.querySelector('#panel-warnings .search-box');
+
+                if (tabId === 'tab-history') {
+                    currentMode = 'history';
+                    if (tableCard) tableCard.style.display = '';
+                    if (imageSection) imageSection.style.display = 'none';
+                    if (statsRow) statsRow.style.display = '';
+                    if (searchBox) searchBox.style.display = '';
+                    // 拉取数据库中留存的全部历史记录
+                    fetchHistory();
+                } else if (tabId === 'tab-images') {
+                    currentMode = 'images';
+                    if (tableCard) tableCard.style.display = 'none';
+                    if (imageSection) imageSection.style.display = '';
+                    if (statsRow) statsRow.style.display = 'none';
+                    if (searchBox) searchBox.style.display = '';
+                    refreshStationImages();
+                } else if (tabId === 'tab-guide') {
+                    alert('📖 使用指南：\n• 「历史记录」查看所有留存检测记录\n• 「识别实拍」查看工位识别结果实拍图\n• 工位数据每 5 秒刷新，历史记录每 3 秒刷新\n• 搜索框可过滤工位编号或状态');
+                }
+            });
+        });
+
+        // ============================================================
+        // 7-extra. 识别结果图库
+        // ============================================================
+        let stationImageFilter = 'all';  // 当前筛选的工位
+
+        // 工位编号显示映射（IoTDA 已直接上报 101/102/103，无需偏移）
+        function stationLabel(id) {
+            return id;
+        }
+
+        async function refreshStationImages() {
+            try {
+                const resp = await fetch(`${API_BASE}/station-images`);
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                stationImages = await resp.json();
+                buildFilterBar();
+                renderImageGallery();
+                document.getElementById('imageCount').textContent = `共 ${stationImages.length} 张`;
+            } catch (err) {
+                console.error('加载识别图片失败:', err);
+                document.getElementById('imageGallery').innerHTML = `
+                    <div class="gallery-empty">
+                        <div class="empty-icon">⚠️</div>
+                        <div class="empty-text">图片加载失败</div>
+                        <div class="empty-sub">${err.message}</div>
+                    </div>`;
+            }
+        }
+
+        function buildFilterBar() {
+            const bar = document.getElementById('stationFilterBar');
+            // 统计各工位的图片数量
+            const stationIds = [...new Set(stationImages.map(img => img.station_id))].sort((a, b) => a - b);
+            let html = '<span class="filter-label">🔍 筛选工位：</span>';
+            html += `<button class="station-filter-btn ${stationImageFilter === 'all' ? 'active-filter' : ''}" data-filter="all">全部<span class="filter-count">(${stationImages.length})</span></button>`;
+            stationIds.forEach(sid => {
+                const count = stationImages.filter(img => img.station_id === sid).length;
+                const active = stationImageFilter === String(sid) ? ' active-filter' : '';
+                html += `<button class="station-filter-btn${active}" data-filter="${sid}">📍 工位 ${stationLabel(sid)}<span class="filter-count">(${count})</span></button>`;
+            });
+            bar.innerHTML = html;
+
+            // 绑定筛选点击事件
+            bar.querySelectorAll('.station-filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    stationImageFilter = this.getAttribute('data-filter');
+                    buildFilterBar();
+                    renderImageGallery();
+                });
+            });
+        }
+
+        function renderImageGallery() {
+            const gallery = document.getElementById('imageGallery');
+            
+            // 按筛选条件过滤
+            let filtered = stationImages;
+            if (stationImageFilter !== 'all') {
+                filtered = stationImages.filter(img => img.station_id === parseInt(stationImageFilter));
+            }
+
+            if (filtered.length === 0) {
+                const msg = stationImageFilter === 'all'
+                    ? '暂无识别结果图'
+                    : `工位 ${stationLabel(parseInt(stationImageFilter))} 暂无识别结果图`;
+                const sub = stationImageFilter === 'all'
+                    ? '巡检完成后将在此显示工位实拍结果'
+                    : '该工位尚未上传识别结果图';
+                gallery.innerHTML = `
+                    <div class="gallery-empty">
+                        <div class="empty-icon">📷</div>
+                        <div class="empty-text">${msg}</div>
+                        <div class="empty-sub">${sub}</div>
+                    </div>`;
+                return;
+            }
+
+            // 按工位分组，每组按时间倒序
+            const groups = {};
+            filtered.forEach(img => {
+                if (!groups[img.station_id]) groups[img.station_id] = [];
+                groups[img.station_id].push(img);
+            });
+            // 每组内按时间倒序
+            Object.values(groups).forEach(arr => arr.sort((a, b) => b.timestamp - a.timestamp));
+
+            // 工位颜色映射
+            const dotColors = { 1: 's1', 2: 's2', 3: 's3', 4: 's4' };
+            const stationColors = { 1: '#2a6ef5', 2: '#27ae60', 3: '#f39c12', 4: '#e74c3c' };
+
+            // 按工位编号排序渲染
+            const sortedStationIds = Object.keys(groups).map(Number).sort((a, b) => a - b);
+
+            let html = '';
+            sortedStationIds.forEach(sid => {
+                const images = groups[sid];
+                const dotClass = dotColors[sid] || 's1';
+                const latestTs = images[0].timestamp;
+                html += `
+                <div class="station-section">
+                    <div class="station-section-header">
+                        <span class="station-dot ${dotClass}"></span>
+                        <span class="section-title">📍 工位 ${stationLabel(sid)}</span>
+                        <span class="section-count">共 ${images.length} 张 · 最新 ${new Date(latestTs * 1000).toLocaleString('zh-CN', { hour12: false })}</span>
+                    </div>
+                    <div class="station-section-body">`;
+
+                images.forEach((img, idx) => {
+                    const timeStr = new Date(img.timestamp * 1000).toLocaleString('zh-CN', { hour12: false });
+                    const imageUrl = `${API_BASE}/station-image/${encodeURIComponent(img.filename)}`;
+                    let sizeStr = '';
+                    if (img.size < 1024) sizeStr = img.size + ' B';
+                    else if (img.size < 1024 * 1024) sizeStr = (img.size / 1024).toFixed(1) + ' KB';
+                    else sizeStr = (img.size / (1024 * 1024)).toFixed(1) + ' MB';
+                    const isLatest = idx === 0;
+                    const badgeHtml = isLatest
+                        ? '<span class="card-badge latest-badge">最新</span>'
+                        : '<span class="card-badge old-badge">历史</span>';
+
+                    html += `
+                        <div class="gallery-card" onclick="openImagePreview('${imageUrl}', '工位 ${stationLabel(sid)}', '${timeStr}', '${sizeStr}')">
+                            <div class="card-img-wrap">
+                                <img src="${imageUrl}" alt="工位${sid}识别结果" loading="lazy" />
+                                <button class="card-delete-btn" title="删除此图片" onclick="event.stopPropagation();deleteStationImage('${img.filename}')">✕</button>
+                                <div class="img-overlay">
+                                    <span class="overlay-text">🔍 点击查看大图</span>
+                                </div>
+                            </div>
+                            <div class="card-info">
+                                ${badgeHtml}
+                                <span class="time-text">🕒 ${timeStr}</span>
+                            </div>
+                        </div>`;
+                });
+
+                html += `</div></div>`;
+            });
+
+            gallery.innerHTML = html;
+        }
+
+        function openImagePreview(imageUrl, stationLabel, timeStr, sizeStr) {
+            const modal = document.getElementById('imagePreviewModal');
+            document.getElementById('imagePreviewImg').src = imageUrl;
+            document.getElementById('imagePreviewCaption').textContent =
+                [stationLabel, timeStr, sizeStr].filter(Boolean).join(' · ');
+            modal.classList.remove('panel-hidden');
+        }
+
+        function closeImagePreview(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('imagePreviewModal').classList.add('panel-hidden');
+        }
+
+        // 删除单张识别结果图
+        async function deleteStationImage(filename) {
+            if (!confirm(`确定要删除图片 "${filename}" 吗？此操作不可恢复。`)) return;
+            try {
+                const resp = await fetch(`${API_BASE}/station-image/${encodeURIComponent(filename)}`, { method: 'DELETE' });
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                const result = await resp.json();
+                console.log('🗑', result.message);
+                // 刷新图库
+                await refreshStationImages();
+            } catch (err) {
+                console.error('删除图片失败:', err);
+                alert('删除失败: ' + err.message);
+            }
+        }
+
+        // 清空全部识别结果图
+        async function deleteAllStationImages() {
+            if (!confirm(`⚠️ 确定要删除全部 ${stationImages.length} 张识别结果图吗？此操作不可恢复。`)) return;
+            try {
+                const filenames = stationImages.map(img => img.filename);
+                let success = 0, fail = 0;
+                for (const f of filenames) {
+                    try {
+                        const resp = await fetch(`${API_BASE}/station-image/${encodeURIComponent(f)}`, { method: 'DELETE' });
+                        if (resp.ok) success++; else fail++;
+                    } catch (e) { fail++; }
+                }
+                console.log(`🗑 批量删除完成: 成功 ${success} 张, 失败 ${fail} 张`);
+                await refreshStationImages();
+            } catch (err) {
+                console.error('批量删除失败:', err);
+                alert('批量删除失败: ' + err.message);
+            }
+        }
+
+        // 定时刷新识别结果图（每30秒）
+        setInterval(() => {
+            if (currentMode === 'images') {
+                refreshStationImages();
+            }
+        }, 30000);
+
+        // 加载整改记录（学生拍照上传的整改结果）
+        async function loadRectifications() {
+            const tbody = document.getElementById('rectifyTableBody');
+            tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--text-secondary);">加载中...</td></tr>';
+            try {
+                const resp = await fetch(`${API_BASE}/rectifications`);
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                const list = await resp.json();
+                const today = new Date().toLocaleDateString('sv-SE'); // 本地日期 YYYY-MM-DD
+                const todayCount = list.filter(r => (r.created_at || '').indexOf(today) === 0).length;
+                document.getElementById('statRectifyTotal').textContent = list.length;
+                document.getElementById('statRectifyToday').textContent = todayCount;
+                document.getElementById('rectifyRecordCount').textContent = '共 ' + list.length + ' 条记录';
+                if (!list.length) {
+                    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--text-secondary);">暂无整改记录</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = list.map(r => {
+                    let imgHtml = '--';
+                    if (r.image_filename) {
+                        const imgUrl = `${API_BASE}/rectification-image/${encodeURIComponent(r.image_filename)}?v=${encodeURIComponent(r.created_at || '')}`;
+                        imgHtml = `<img src="${imgUrl}" alt="整改照片" loading="lazy"
+                            style="width:90px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid #e3e8f0;"
+                            onclick="openImagePreview('${imgUrl}', '整改照片 · 工位 ${r.station_number}', '${r.created_at}', '')" />`;
+                    }
+                    return `<tr>
+                        <td>${r.id}</td>
+                        <td>${r.student_id || '--'}</td>
+                        <td>${r.name || '--'}</td>
+                        <td>${r.lab || '--'}</td>
+                        <td>${r.station_number || '--'}</td>
+                        <td style="max-width:260px;">${r.issue_desc || '--'}</td>
+                        <td>${imgHtml}</td>
+                        <td>${r.created_at || '--'}</td>
+                        <td><button class="btn btn-outline btn-sm" style="color:var(--danger);border-color:var(--danger);" onclick="deleteRectification(${r.id})">删除</button></td>
+                    </tr>`;
+                }).join('');
+            } catch (err) {
+                console.error('加载整改记录失败:', err);
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--text-secondary);">加载失败: ' + err.message + '</td></tr>';
+            }
+        }
+
+        // 删除整改记录（连同整改照片一并删除）
+        async function deleteRectification(id) {
+            if (!confirm(`确定要删除整改记录 #${id} 吗？关联照片将一并删除，此操作不可恢复。`)) return;
+            try {
+                const resp = await fetch(`${API_BASE}/rectification/${id}`, { method: 'DELETE' });
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                const result = await resp.json();
+                console.log('🗑', result.message);
+                await loadRectifications();
+            } catch (err) {
+                console.error('删除整改记录失败:', err);
+                alert('删除失败: ' + err.message);
+            }
+        }
+
+        // ============================================================
+        // 8. 侧边栏导航切换
+        // ============================================================
+        const navItems = document.querySelectorAll('.nav-item');
+        const panels = document.querySelectorAll('.panel');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(n => n.classList.remove('active'));
+                this.classList.add('active');
+                const targetPanelId = this.getAttribute('data-panel');
+                panels.forEach(panel => {
+                    panel.classList.toggle('panel-hidden', panel.id !== targetPanelId);
+                });
+                // 切换到对应面板时加载数据
+                if (targetPanelId === 'panel-warnings') {
+                    fetchDeviceStatus();
+                    refreshStationImages();  // 预加载图片
+                    // 重置到历史记录标签页
+                    const historyTab = document.querySelector('#inspectionTabs .tab-btn[data-tab="tab-history"]');
+                    if (historyTab) historyTab.click();
+                }
+                if (targetPanelId === 'panel-users') { fetchDeviceStatus(); loadUsers(); }
+                if (targetPanelId === 'panel-labs') loadLabs();
+                if (targetPanelId === 'panel-cars') loadCars();
+                if (targetPanelId === 'panel-rectify') loadRectifications();
+                if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+            });
+        });
+
+        // ============================================================
+        // 9. 模态框操作
+        // ============================================================
+        function openModal(id) {
+            document.getElementById(id).classList.remove('panel-hidden');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.add('panel-hidden');
+        }
+
+        document.querySelectorAll('.modal-overlay').forEach(el => {
+            el.addEventListener('click', function(e) {
+                if (e.target === this) this.classList.add('panel-hidden');
+            });
+        });
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay').forEach(m => m.classList.add('panel-hidden'));
+                document.getElementById('imagePreviewModal').classList.add('panel-hidden');
+            }
+        });
+
+        // ============================================================
+        // 10. 按钮事件绑定
+        // ============================================================
+        document.getElementById('btnUserSubmit').addEventListener('click', saveUser);
+        document.getElementById('btnLabSubmit').addEventListener('click', saveLab);
+        document.getElementById('btnCarSubmit').addEventListener('click', saveCar);
+
+        // 打开"添加"按钮时重置表单（仅当按钮存在时绑定）
+        document.querySelector('#panel-users .btn-primary')?.addEventListener('click', resetUserModal);
+        document.querySelector('#panel-labs .btn-primary')?.addEventListener('click', resetLabModal);
+        document.querySelector('#panel-cars .btn-primary')?.addEventListener('click', resetCarModal);
+
+        // ============================================================
+        // 11. 工具函数
+        // ============================================================
+        function escHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        // ============================================================
+        // 12. 初始化
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchDeviceStatus();
+            refreshStationImages();  // 预加载识别结果图
+            console.log('🧪 系统已启动：MySQL + IoTDA + 识别实拍 三数据源');
+        });
+
+        // 暴露到全局
+        window.filterTable = filterTable;
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+        window.editUser = editUser;
+        window.deleteUser = deleteUser;
+        window.editLab = editLab;
+        window.deleteLab = deleteLab;
+        window.editCar = editCar;
+        window.deleteCar = deleteCar;
+        window.startInspection = startInspection;
+        window.stopInspection = stopInspection;
+        window.refreshStationImages = refreshStationImages;
+        window.openImagePreview = openImagePreview;
+        window.closeImagePreview = closeImagePreview;
+    </script>
+
+</body>
+</html>

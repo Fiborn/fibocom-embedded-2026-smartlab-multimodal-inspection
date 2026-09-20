@@ -1,0 +1,49 @@
+<view class="tip" wx:if="{{updated}}">🛰️ 最近更新：{{updated}} · 下拉刷新</view>
+
+<view class="empty" wx:if="{{loading}}">
+  <view class="empty-icon">⏳</view>
+  加载中…
+</view>
+<view class="empty" wx:elif="{{error}}">
+  <view class="empty-icon">📡</view>
+  {{error}}
+</view>
+<view class="empty" wx:elif="{{!hasBinding}}">
+  <view class="empty-icon">🔗</view>
+  您还没有绑定工位
+  <view class="empty-sub">绑定后才能查看自己工位的实时状态</view>
+  <view class="btn-wrap">
+    <button class="btn-primary" bindtap="goBind">去绑定工位</button>
+  </view>
+</view>
+<view class="empty" wx:elif="{{!myStation}}">
+  <view class="empty-icon">🤖</view>
+  暂无工位 {{stationText}} 的数据
+  <view class="empty-sub">等待巡检机器人上报后下拉刷新</view>
+</view>
+
+<view class="station-card mine" wx:if="{{myStation}}">
+  <view class="sc-head">
+    <view class="sc-badge sc-badge-mine">S</view>
+    <text class="sc-id">{{myStation.station_id}}</text>
+    <text class="tag tag-blue">我的工位</text>
+    <text class="sc-status {{myStation.has_abnormality === '是' ? 'sc-bad' : 'sc-ok'}}">
+      {{myStation.has_abnormality === '是' ? '⚠ 存在异常' : '✓ 状态正常'}}
+    </text>
+  </view>
+  <view class="sc-grid">
+    <view class="sc-item"><text class="sc-label">🪑 座椅</text><text class="sc-value {{myStation.chairCls}}">{{myStation.chair_status}}</text></view>
+    <view class="sc-item"><text class="sc-label">📊 示波器</text><text class="sc-value {{myStation.oscCls}}">{{myStation.oscilloscope}}</text></view>
+    <view class="sc-item"><text class="sc-label">🎛️ 信号源</text><text class="sc-value {{myStation.sigCls}}">{{myStation.siggen}}</text></view>
+    <view class="sc-item"><text class="sc-label">🔌 电源</text><text class="sc-value {{myStation.psuCls}}">{{myStation.power_supply}}</text></view>
+    <view class="sc-item"><text class="sc-label">🧰 万用表</text><text class="sc-value {{myStation.dmmCls}}">{{myStation.multimeter}}</text></view>
+    <view class="sc-item"><text class="sc-label">🎒 杂乱</text><text class="sc-value {{myStation.messCls}}">{{myStation.has_mess}}</text></view>
+  </view>
+  <view class="sc-detail" wx:if="{{myStation.has_mass_detail}}">🍶 杂乱：{{myStation.has_mass_detail}}</view>
+  <view class="warn-hint" wx:if="{{myStation.has_abnormality === '是' && !todayDone}}">⚠️ 工位存在异常，请当天完成整改并拍照上传</view>
+  <view class="btn-wrap" wx:if="{{myStation.has_abnormality === '是' && !todayDone}}">
+    <button class="btn-primary" bindtap="goRectify">🛠️ 提交整改结果</button>
+  </view>
+  <view class="today-tag" wx:if="{{todayDone}}">✅ 今日已提交整改</view>
+  <view class="bind-hint">💡 本页面仅展示您绑定工位 {{stationText}} 的状态</view>
+</view>

@@ -1,0 +1,43 @@
+<view class="stats-card">
+  <view class="stat">
+    <view class="stat-icon">🏁</view>
+    <view class="stat-num">{{total}}</view>
+    <view class="stat-label">累计签到</view>
+  </view>
+  <view class="stat">
+    <view class="stat-icon">🔥</view>
+    <view class="stat-num">{{weekCount}}</view>
+    <view class="stat-label">近 7 天签到</view>
+  </view>
+</view>
+
+<view class="empty" wx:if="{{loading}}">
+  <view class="empty-icon">⏳</view>
+  加载中…
+</view>
+<view class="empty" wx:elif="{{error}}">
+  <view class="empty-icon">📡</view>
+  {{error}}
+</view>
+<view class="empty" wx:elif="{{!records.length}}">
+  <view class="empty-icon">🗓️</view>
+  暂无签到记录
+</view>
+
+<view class="card" wx:else>
+  <view class="card-title">📅 签到时间线</view>
+  <view class="timeline">
+    <view class="t-item" wx:for="{{records}}" wx:key="id">
+      <view class="t-dot {{item.within_range ? 'ok' : 'warn'}}"></view>
+      <view class="t-body">
+        <view class="t-time">🕐 {{item.checkin_time}}</view>
+        <view class="t-place">{{item.lab}} · {{item.station_number}}</view>
+        <view class="t-meta">
+          <text class="tag {{item.within_range ? 'tag-green' : 'tag-orange'}}">{{item.within_range ? '范围内' : '超出范围'}}</text>
+          <text class="t-dist">距实验室 {{item.distance_m}} 米</text>
+        </view>
+        <view class="t-addr" wx:if="{{item.address}}">📍 {{item.address}}</view>
+      </view>
+    </view>
+  </view>
+</view>

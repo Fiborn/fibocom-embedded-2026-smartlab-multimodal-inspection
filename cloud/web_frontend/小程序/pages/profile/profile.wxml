@@ -1,0 +1,59 @@
+<view class="p-head">
+  <view class="deco d1"></view>
+  <view class="deco d2"></view>
+  <view class="p-avatar">{{avatarText}}</view>
+  <view class="p-info">
+    <view class="p-name">{{student.name}}</view>
+    <view class="p-id">🎓 学号 {{student.student_id}}</view>
+    <view class="p-id" wx:if="{{student.phone}}">📱 {{student.phone}}</view>
+  </view>
+</view>
+
+<view class="card">
+  <view class="card-title">🏫 实验室绑定</view>
+  <view class="binding-row">
+    <view class="bind-icon">🔬</view>
+    <view class="bind-info">
+      <view class="b-lab">{{student.lab || '未绑定实验室'}}</view>
+      <view class="b-station">💺 工位 {{student.station_number || '未绑定'}}</view>
+    </view>
+    <view class="edit-btn" bindtap="goBind">修改</view>
+  </view>
+</view>
+
+<view class="card">
+  <view class="menu-item" bindtap="goRecords">
+    <view class="bubble bubble-orange small">📋</view>
+    <text class="m-text">签到记录</text>
+    <text class="m-arrow">›</text>
+  </view>
+  <view class="menu-item" bindtap="goNotices">
+    <view class="bubble bubble-green small">📢</view>
+    <text class="m-text">公告中心</text>
+    <text class="m-arrow">›</text>
+  </view>
+  <view class="menu-item" bindtap="goInstruments">
+    <view class="bubble bubble-cyan small">📖</view>
+    <text class="m-text">仪器使用说明</text>
+    <text class="m-arrow">›</text>
+  </view>
+  <view class="menu-item" bindtap="goRectify">
+    <view class="bubble bubble-orange small">🛠️</view>
+    <text class="m-text">整改记录</text>
+    <text class="m-arrow">›</text>
+  </view>
+  <view class="menu-item" bindtap="goRules">
+    <view class="bubble bubble-red small">🛡️</view>
+    <text class="m-text">实验室安全须知</text>
+    <text class="m-arrow">›</text>
+  </view>
+  <view class="menu-item" bindtap="about">
+    <view class="bubble bubble-blue small">ℹ️</view>
+    <text class="m-text">关于小程序</text>
+    <text class="m-arrow">›</text>
+  </view>
+</view>
+
+<view class="btn-wrap">
+  <button class="logout-btn" bindtap="logout">退出登录</button>
+</view>

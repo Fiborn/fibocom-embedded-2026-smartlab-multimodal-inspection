@@ -1,0 +1,47 @@
+<view class="steps">
+  <view class="step active">
+    <view class="step-num">1</view>
+    <text>选实验室</text>
+  </view>
+  <view class="step-line"></view>
+  <view class="step {{labIndex >= 0 ? 'active' : ''}}">
+    <view class="step-num">2</view>
+    <text>选工位</text>
+  </view>
+</view>
+
+<view class="card">
+  <view class="card-title">🏫 选择实验室</view>
+  <picker mode="selector" range="{{labs}}" range-key="name" value="{{labIndex}}" bindchange="onLabChange">
+    <view class="picker {{labIndex >= 0 ? '' : 'placeholder'}}">
+      <view>
+        <view class="picker-main">{{labIndex >= 0 ? labs[labIndex].name : '请选择实验室'}}</view>
+        <view class="picker-sub" wx:if="{{labIndex >= 0}}">{{labs[labIndex].lab_code}} · {{stationCount}} 个工位 · {{labs[labIndex].status}}</view>
+      </view>
+      <text class="arrow">›</text>
+    </view>
+  </picker>
+  <view class="lab-address" wx:if="{{labIndex >= 0 && labs[labIndex].address}}">📍 {{labs[labIndex].address}}</view>
+</view>
+
+<view class="card">
+  <view class="card-title">💺 选择工位号</view>
+  <view class="chips" wx:if="{{stationChips.length}}">
+    <view
+      wx:for="{{stationChips}}"
+      wx:key="number"
+      class="chip {{stationNumber === item.label ? 'chip-active' : ''}}"
+      data-num="{{item.label}}"
+      bindtap="onStationTap"
+    >{{item.label}}</view>
+  </view>
+  <view class="custom-row">
+    <text class="custom-label">其他工位</text>
+    <input class="custom-input" placeholder="输入编号，如 102，自动生成 S-102" value="{{customStation}}" bindinput="onCustomInput" />
+  </view>
+</view>
+
+<view class="btn-wrap">
+  <button class="btn-primary {{loading ? 'disabled' : ''}}" bindtap="submit" loading="{{loading}}">确认绑定</button>
+</view>
+<view class="hint">绑定后可在「我的」页面修改实验室与工位</view>

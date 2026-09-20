@@ -1,0 +1,26 @@
+vision_node:
+  ros__parameters:
+    # BPU 单模型
+    model_path: "/userdata/dev_ws/src/lab_inspection/models/yolov8n.bin"
+    conf_thres: 0.1
+    iou_thres: 0.3
+    camera_topic: "/image"
+
+    # 华为云 IoTDA 连接参数
+    huawei_mqtt_server: 
+    huawei_mqtt_port: 
+    device_id:    
+    device_secret: 
+
+    # 大模型 API Key 配置
+    qwen_api_key: 
+
+    # L610 模块底层串口参数
+    uart_device: "/dev/ttyUSB1"
+    uart_baudrate: 115200
+
+    # 上位机云管理平台地址（用于上传识别结果图）
+    upload_server_url: 
+
+    # 常用物品检测字典（传给千问大模型进行二次研判）
+    forgotten_items_dict: ["手机", "水杯", "耳机", "鼠标", "笔", "眼镜"]

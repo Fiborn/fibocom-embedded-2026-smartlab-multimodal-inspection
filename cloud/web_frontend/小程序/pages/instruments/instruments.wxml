@@ -1,0 +1,24 @@
+<view class="empty" wx:if="{{loading}}">
+  <view class="empty-icon">⏳</view>
+  加载中…
+</view>
+<view class="empty" wx:elif="{{error}}">
+  <view class="empty-icon">📡</view>
+  {{error}}
+</view>
+<view class="empty" wx:elif="{{!list.length}}">
+  <view class="empty-icon">📖</view>
+  暂无仪器使用说明
+</view>
+
+<view class="guide-card" wx:for="{{list}}" wx:key="id" data-id="{{item.id}}" bindtap="toggle">
+  <view class="g-accent"></view>
+  <view class="g-main">
+    <view class="g-head">
+      <view class="g-icon">{{item.icon}}</view>
+      <view class="g-name">{{item.name}}</view>
+      <text class="arrow {{openId === item.id ? 'open' : ''}}">⌄</text>
+    </view>
+    <view class="g-content" wx:if="{{openId === item.id}}">{{item.content}}</view>
+  </view>
+</view>

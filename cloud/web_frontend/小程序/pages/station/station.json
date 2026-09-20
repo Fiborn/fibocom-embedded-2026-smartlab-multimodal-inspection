@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "工位状态",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "usingComponents": {}
+}

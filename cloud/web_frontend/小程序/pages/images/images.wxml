@@ -1,0 +1,47 @@
+<view class="tip" wx:if="{{hasBinding}}">📷 仅显示您工位 {{stationText}} 的巡检图片（下拉刷新）</view>
+
+<view class="empty" wx:if="{{loading}}">
+  <view class="empty-icon">⏳</view>
+  加载中…
+</view>
+<view class="empty" wx:elif="{{error}}">
+  <view class="empty-icon">📡</view>
+  {{error}}
+</view>
+<view class="empty" wx:elif="{{!hasBinding}}">
+  <view class="empty-icon">🔗</view>
+  您还没有绑定工位
+  <view class="empty-sub">绑定后才能查看自己工位的巡检图片</view>
+  <view class="btn-wrap">
+    <button class="btn-primary" bindtap="goBind">去绑定工位</button>
+  </view>
+</view>
+<view class="empty" wx:elif="{{!groups.length}}">
+  <view class="empty-icon">📷</view>
+  暂无工位 {{stationText}} 的巡检图片
+  <view class="empty-sub">等待机器人巡检拍照上传后可下拉刷新</view>
+</view>
+
+<view class="card group" wx:for="{{groups}}" wx:key="station">
+  <view class="group-head">
+    <view class="g-badge g-badge-mine">{{item.station}}</view>
+    <text class="tag tag-blue">我的工位</text>
+    <text class="group-count">共 {{item.items.length}} 张 · 点击图片可放大</text>
+  </view>
+  <view class="img-grid">
+    <view class="img-item" wx:for="{{item.items}}" wx:for-item="img" wx:key="filename">
+      <view class="img-frame">
+        <image
+          class="img"
+          src="{{img.url}}"
+          mode="aspectFill"
+          data-urls="{{item.urls}}"
+          data-current="{{img.url}}"
+          bindtap="preview"
+        />
+        <view class="img-zoom">🔍</view>
+      </view>
+      <view class="img-time">🕐 {{img.timeLabel}}</view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,235 @@
+# Nav2 导航参数 —— 基于 originbot 官方配置优化
+amcl:
+  ros__parameters:
+    use_sim_time: false
+    alpha1: 0.15    # ★ 从0.2降低，减少里程计噪声放大，yaw更平稳
+    alpha2: 0.15
+    alpha3: 0.15
+    alpha4: 0.15
+    alpha5: 0.15
+    base_frame_id: "base_footprint"
+    global_frame_id: "map"
+    odom_frame_id: "odom"
+    laser_model_type: "likelihood_field"
+    laser_max_range: 10.0
+    laser_min_range: 0.05   # ★ 过滤近距离反光噪点
+    laser_z_hit: 0.75       # ★ 降低匹配权重（默认0.95），容忍地图与环境不一致
+    max_beams: 60
+    max_particles: 1000     # ★ 增加粒子，定位更稳定
+    min_particles: 500
+    pf_err: 0.03            # ★ 收敛阈值更小，位姿更平滑
+    pf_z: 0.99
+    update_min_d: 0.15      # ★ 更频繁更新，抑制漂移
+    update_min_a: 0.15
+    resample_interval: 1
+    transform_tolerance: 0.5 # ★ 缩小TF容忍，减少位姿滞后
+    recovery_alpha_slow: 0.0
+    recovery_alpha_fast: 0.0
+    robot_model_type: "nav2_amcl::DifferentialMotionModel"
+    set_initial_pose: true
+    always_reset_initial_pose: false
+    initial_pose:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      yaw: 0.0
+
+bt_navigator:
+  ros__parameters:
+    use_sim_time: false
+    global_frame: "map"
+    robot_base_frame: "base_link"
+    odom_topic: "/odom"
+    bt_loop_duration: 100
+    default_server_timeout: 20
+    # 使用 Nav2 内置默认行为树: navigate_to_pose_w_replanning_and_recovery.xml
+    # 具备 1Hz 持续重规划 + 自动恢复（清代价地图→旋转→等待→重试）
+    # 如需回退到单次规划版本，取消下面 bt_xml_filename 注释即可:
+    # bt_xml_filename: "/userdata/dev_ws/install/lab_inspection/share/lab_inspection/config/navigate_no_replan.xml"
+    plugin_lib_names:
+      - nav2_compute_path_to_pose_action_bt_node
+      - nav2_compute_path_through_poses_action_bt_node
+      - nav2_smooth_path_action_bt_node
+      - nav2_follow_path_action_bt_node
+      - nav2_spin_action_bt_node
+      - nav2_wait_action_bt_node
+      - nav2_back_up_action_bt_node
+      - nav2_drive_on_heading_bt_node
+      - nav2_clear_costmap_service_bt_node
+      - nav2_is_stuck_condition_bt_node
+      - nav2_goal_reached_condition_bt_node
+      - nav2_goal_updated_condition_bt_node
+      - nav2_globally_updated_goal_condition_bt_node
+      - nav2_is_path_valid_condition_bt_node
+      - nav2_initial_pose_received_condition_bt_node
+      - nav2_reinitialize_global_localization_service_bt_node
+      - nav2_rate_controller_bt_node
+      - nav2_distance_controller_bt_node
+      - nav2_recovery_node_bt_node
+      - nav2_pipeline_sequence_bt_node
+      - nav2_round_robin_node_bt_node
+      - nav2_remove_passed_goals_action_bt_node
+
+controller_server:
+  ros__parameters:
+    use_sim_time: false
+    controller_frequency: 5.0     # ★ 降到5Hz，减轻 CPU 负载，避免控制循环掉频
+    min_x_velocity_threshold: 0.001
+    min_y_velocity_threshold: 0.5
+    min_theta_velocity_threshold: 0.001
+    failure_tolerance: 0.3
+    progress_checker_plugin: "progress_checker"
+    goal_checker_plugins: ["general_goal_checker"]
+    controller_plugins: ["FollowPath"]
+    current_goal_checker: "general_goal_checker"   # ★ 明确指定当前使用的目标检查器
+
+    progress_checker:
+      plugin: "nav2_controller::SimpleProgressChecker"
+      required_movement_radius: 0.10   # ★ 微调，平衡微小修正与停滞判定
+      movement_time_allowance: 30.0     # ★ 放宽超时，给低速微调更多时间
+
+    general_goal_checker:
+      plugin: "nav2_controller::SimpleGoalChecker"
+      xy_goal_tolerance: 0.10          # ★ 10cm，兼顾精度与可达性
+      yaw_goal_tolerance: 0.10         # ★ ~2.86°，高精度角度
+      stateful: true
+
+    # DWB 控制器 —— 低速柔和、高减速比、低角度权重，杜绝超调振荡
+    FollowPath:
+      plugin: "dwb_core::DWBLocalPlanner"
+      min_vel_x: 0.0
+      min_vel_y: 0.0
+      max_vel_x: 0.13
+      max_vel_y: 0.0
+      max_vel_theta: 0.8               # ★ 适中值，兼顾转弯跟随与防超调
+      min_speed_xy: 0.0
+      max_speed_xy: 0.12  
+      min_speed_theta: 0.15          # ★ 设最小角速度，克服静摩擦死区（原0.0）
+      acc_lim_x: 0.8
+      acc_lim_y: 0.0
+      acc_lim_theta: 2.0               # ★ 提高角加速度=旋转"马力"（原1.2）
+      decel_lim_x: -0.8
+      decel_lim_y: 0.0
+      decel_lim_theta: -2.0            # ★ 制动也对应加大（原-1.2）
+      vx_samples: 10
+      vy_samples: 0
+      vtheta_samples: 10              # ★ 更多角速度采样，支持微小角度修正
+      sim_time: 1.5
+      linear_granularity: 0.05
+      angular_granularity: 0.015       # ★ 更细粒度，选出极小修正转速
+      transform_tolerance: 0.2
+      xy_goal_tolerance: 0.10          # ★ 与 goal_checker 保持一致
+      trans_stopped_velocity: 0.05     # ★ 提高"静止"判定阈值，减少到达前的微调纠缠
+      short_circuit_trajectory_evaluation: true
+      stateful: true
+      critics: ["RotateToGoal", "BaseObstacle", "PathAlign", "PathDist", "GoalDist", "GoalAlign"]
+      BaseObstacle.scale: 1.0         # ★ 提高避障权重，优先规避障碍物
+      PathAlign.scale: 10.0
+      PathAlign.forward_point_distance: 0.1
+      GoalAlign.scale: 5.0             # ★ 适中角度对齐，既不过激也不忽视
+      GoalAlign.forward_point_distance: 0.1
+      PathDist.scale: 20.0
+      GoalDist.scale: 15.0             # ★ 加大趋近目标权重，对抗过度减速（原10.0）
+      RotateToGoal.scale: 12.0          # ★ 提高旋转权重，角度纠偏更积极（原8.0）
+      RotateToGoal.slowing_factor: 1.5 # ★ 大幅降低减速因子，靠近目标时保持速度（原3.0）
+      RotateToGoal.lookahead_time: 0.5 # ★ 缩短预瞄时间，临门一脚才开始减速（原1.0）
+
+planner_server:
+  ros__parameters:
+    use_sim_time: false
+    expected_planner_frequency: 5.0
+    planner_plugins: ["GridBased"]
+    GridBased:
+      plugin: "nav2_navfn_planner/NavfnPlanner"
+      tolerance: 0.5
+      use_astar: true                  # ★ A*搜索，室内场景优于Dijkstra
+      allow_unknown: true
+
+behavior_server:
+  ros__parameters:
+    use_sim_time: false
+    cycle_frequency: 10.0
+    behavior_plugins: ["spin", "backup", "wait"]
+    spin:
+      plugin: "nav2_behaviors/Spin"
+    backup:
+      plugin: "nav2_behaviors/BackUp"
+    drive_on_heading:
+      plugin: "nav2_behaviors/DriveOnHeading"
+    wait:
+      plugin: "nav2_behaviors/Wait"
+    global_frame: "odom"
+    robot_base_frame: "base_link"
+    transform_tolerance: 0.5
+    simulate_ahead_time: 2.0
+    max_rotational_vel: 0.4     # ★ 从1.0降低，recovery 自旋不猛甩
+    min_rotational_vel: 0.15
+    rotational_acc_lim: 0.5     # ★ 从3.2大幅降低，旋转柔和
+
+map_server:
+  ros__parameters:
+    use_sim_time: false
+    yaml_filename: "lab_map.yaml"
+
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      use_sim_time: false
+      robot_base_frame: "base_footprint"
+      global_frame: "map"
+      update_frequency: 0.5
+      publish_frequency: 0.5
+      resolution: 0.05
+      robot_radius: 0.09
+      track_unknown_space: true
+      transform_tolerance: 0.2
+      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+      static_layer:
+        plugin: "nav2_costmap_2d::StaticLayer"
+        map_subscribe_transient_local: true
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        enabled: true
+        observation_sources: scan
+        scan:
+          topic: /scan
+          max_obstacle_height: 2.0
+          clearing: true
+          marking: true
+          data_type: "LaserScan"
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        inflation_radius: 0.09
+        cost_scaling_factor: 2.5         # ★ 从3.0微降，代价梯度更平滑，避免近距离急转
+      always_send_full_costmap: true
+
+local_costmap:
+  local_costmap:
+    ros__parameters:
+      use_sim_time: false
+      robot_base_frame: "base_footprint"
+      global_frame: "odom"
+      update_frequency: 5.0
+      publish_frequency: 2.0
+      rolling_window: true
+      width: 4                           # ★ 从3扩大到4m，给局部规划更多空间
+      height: 4
+      resolution: 0.05
+      robot_radius: 0.09
+      transform_tolerance: 0.2
+      plugins: ["obstacle_layer", "inflation_layer"]
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        enabled: true
+        observation_sources: scan
+        scan:
+          topic: /scan
+          max_obstacle_height: 2.0
+          clearing: true
+          marking: true
+          data_type: "LaserScan"
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        inflation_radius: 0.09
+        cost_scaling_factor: 2.5         # ★ 从3.0微降，代价梯度更平滑
+      always_send_full_costmap: true

@@ -1,0 +1,136 @@
+page {
+  padding-bottom: 140rpx;
+}
+
+.tip {
+  text-align: center;
+  color: #8a95ad;
+  font-size: 22rpx;
+  padding: 18rpx;
+}
+
+/* 工位卡片 */
+.station-card {
+  margin: 24rpx 28rpx;
+  background: #fff;
+  border-radius: 28rpx;
+  padding: 28rpx;
+  box-shadow: 0 10rpx 30rpx rgba(23, 61, 156, 0.08);
+  position: relative;
+}
+
+.station-card.mine {
+  border: 3rpx solid transparent;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(135deg, #3b82f6, #7fc0f7) border-box;
+}
+
+.sc-head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.sc-badge {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 18rpx;
+  background: #eef2fa;
+  color: #7a869e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  font-weight: 700;
+  margin-right: 14rpx;
+}
+
+.sc-badge-mine {
+  background: linear-gradient(135deg, #3b82f6, #7ac0f8);
+  color: #fff;
+}
+
+.sc-id {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1b2a4a;
+  margin-right: 16rpx;
+}
+
+.sc-status {
+  margin-left: auto;
+  font-size: 22rpx;
+  font-weight: 600;
+  padding: 6rpx 16rpx;
+  border-radius: 22rpx;
+}
+
+.sc-ok { background: #e4f8ef; color: #0cae6d; }
+.sc-bad { background: #ffe9ec; color: #f04355; }
+
+.sc-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.sc-item {
+  width: 33.33%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14rpx 0;
+}
+
+.sc-label {
+  font-size: 23rpx;
+  color: #98a3b8;
+}
+
+.sc-value {
+  margin-top: 8rpx;
+  font-size: 27rpx;
+  font-weight: 700;
+  padding: 4rpx 18rpx;
+  border-radius: 20rpx;
+  background: #f4f7fc;
+  color: #44506b;
+}
+
+.sc-value.ok { background: #e4f8ef; color: #0cae6d; }
+.sc-value.warn { background: #fff3e2; color: #f08a24; }
+.sc-value.bad { background: #ffe9ec; color: #f04355; }
+
+.sc-detail {
+  background: #fff6e8;
+  border-radius: 16rpx;
+  padding: 14rpx 20rpx;
+  font-size: 23rpx;
+  color: #c47a2a;
+  margin-top: 12rpx;
+}
+
+.bind-hint {
+  margin-top: 16rpx;
+  font-size: 23rpx;
+  color: #98a3b8;
+  text-align: center;
+}
+
+.warn-hint {
+  margin-top: 16rpx;
+  padding: 16rpx 20rpx;
+  background: #fff3e2;
+  border-radius: 16rpx;
+  font-size: 24rpx;
+  color: #c47a2a;
+  text-align: center;
+}
+
+.today-tag {
+  margin-top: 16rpx;
+  text-align: center;
+  font-size: 25rpx;
+  color: #0cae6d;
+  font-weight: 600;
+}

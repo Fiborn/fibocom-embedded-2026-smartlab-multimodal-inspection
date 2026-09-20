@@ -1,0 +1,55 @@
+.notice-card {
+  position: relative;
+  margin: 24rpx 28rpx;
+  background: #fff;
+  border-radius: 28rpx;
+  padding: 30rpx 30rpx 30rpx 42rpx;
+  box-shadow: 0 10rpx 30rpx rgba(23, 61, 156, 0.08);
+  overflow: hidden;
+}
+
+.n-accent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 12rpx;
+  background: linear-gradient(180deg, #3b82f6, #7fc0f7);
+}
+
+.n-head {
+  display: flex;
+  align-items: center;
+}
+
+.n-title {
+  flex: 1;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1b2a4a;
+}
+
+.arrow2 {
+  color: #9aa5ba;
+  font-size: 34rpx;
+  transition: transform 0.25s;
+}
+
+.arrow2.open {
+  transform: rotate(180deg);
+}
+
+.n-time {
+  color: #98a3b8;
+  font-size: 22rpx;
+  margin-top: 12rpx;
+}
+
+.n-content {
+  font-size: 27rpx;
+  color: #5a6780;
+  line-height: 1.8;
+  margin-top: 18rpx;
+  padding-top: 18rpx;
+  border-top: 1rpx dashed #e6ecf7;
+}

@@ -1,0 +1,110 @@
+.station-line {
+  font-size: 28rpx;
+  color: #1b2a4a;
+  font-weight: 600;
+  margin-bottom: 12rpx;
+}
+
+.issue-list {
+  background: #fff6e8;
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+}
+
+.issue-item {
+  font-size: 26rpx;
+  color: #c47a2a;
+  line-height: 1.8;
+}
+
+.issue-empty {
+  font-size: 26rpx;
+  color: #0cae6d;
+  padding: 20rpx 0;
+}
+
+.today-done {
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  color: #0cae6d;
+  font-weight: 600;
+}
+
+.photo-box {
+  border-radius: 20rpx;
+  overflow: hidden;
+  background: #eef2fa;
+  min-height: 360rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo {
+  width: 100%;
+  height: 360rpx;
+}
+
+.photo-placeholder {
+  text-align: center;
+  color: #98a3b8;
+  padding: 60rpx 0;
+}
+
+.photo-icon {
+  font-size: 90rpx;
+}
+
+.photo-text {
+  font-size: 26rpx;
+  margin-top: 16rpx;
+}
+
+.hint {
+  text-align: center;
+  color: #98a3b8;
+  font-size: 23rpx;
+  margin-top: 16rpx;
+}
+
+.empty-sm {
+  text-align: center;
+  color: #98a3b8;
+  font-size: 24rpx;
+  padding: 30rpx 0;
+}
+
+.record {
+  display: flex;
+  align-items: center;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #f0f3f9;
+}
+
+.record:last-child {
+  border-bottom: none;
+}
+
+.r-info {
+  flex: 1;
+  margin-right: 16rpx;
+}
+
+.r-time {
+  font-size: 24rpx;
+  color: #7a869e;
+}
+
+.r-desc {
+  font-size: 26rpx;
+  color: #2b3550;
+  margin-top: 6rpx;
+}
+
+.r-img {
+  width: 120rpx;
+  height: 90rpx;
+  border-radius: 12rpx;
+  background: #eef2fa;
+  flex-shrink: 0;
+}

@@ -1,0 +1,141 @@
+.info-row {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+  font-size: 28rpx;
+}
+
+.info-icon {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 18rpx;
+  background: #eef2fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  margin-right: 18rpx;
+}
+
+.info-label {
+  width: 130rpx;
+  color: #7a869e;
+}
+
+.info-value {
+  color: #1b2a4a;
+  font-weight: 600;
+}
+
+/* 定位雷达 */
+.loc-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30rpx 0 10rpx;
+}
+
+.radar {
+  position: relative;
+  width: 200rpx;
+  height: 200rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radar-core {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #7ac0f8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56rpx;
+  box-shadow: 0 12rpx 28rpx rgba(59, 130, 246, 0.32);
+  position: relative;
+  z-index: 3;
+}
+
+.radar-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 3rpx solid rgba(59, 130, 246, 0.45);
+}
+
+.r1 {
+  width: 200rpx;
+  height: 200rpx;
+  animation: radarPulse 2.2s ease-out infinite;
+}
+
+.r2 {
+  width: 160rpx;
+  height: 160rpx;
+  animation: radarPulse 2.2s ease-out 0.5s infinite;
+}
+
+@keyframes radarPulse {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(1.15); opacity: 0; }
+}
+
+.loc-hero.idle .radar {
+  opacity: 0.55;
+}
+
+.loc-main {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #24457a;
+  margin-top: 20rpx;
+  text-align: center;
+  padding: 0 16rpx;
+}
+
+.loc-coords {
+  font-size: 22rpx;
+  color: #98a3b8;
+  margin-top: 8rpx;
+}
+
+.loc-sub {
+  font-size: 23rpx;
+  color: #98a3b8;
+  margin-top: 8rpx;
+}
+
+.loc-addr {
+  font-size: 23rpx;
+  color: #0cae6d;
+  margin-top: 8rpx;
+  text-align: center;
+}
+
+.loc-none {
+  color: #98a3b8;
+  font-size: 24rpx;
+}
+
+.loc-btns {
+  display: flex;
+  margin-top: 24rpx;
+}
+
+.mini-btn {
+  flex: 1;
+  margin: 0 10rpx;
+  background: #e6f1fd;
+  color: #3b82f6;
+  border-radius: 40rpx;
+  font-size: 26rpx;
+  line-height: 76rpx;
+}
+
+.hint {
+  text-align: center;
+  color: #98a3b8;
+  font-size: 23rpx;
+  margin-top: 20rpx;
+}

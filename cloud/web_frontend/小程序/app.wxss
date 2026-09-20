@@ -1,0 +1,121 @@
+/* ============ 全局样式 · 电子实验室主题 ============ */
+page {
+  background: #eef5fc;
+  font-size: 28rpx;
+  color: #26334d;
+}
+
+/* 卡片 */
+.card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 28rpx;
+  padding: 32rpx;
+  margin: 24rpx 28rpx;
+  box-shadow: 0 10rpx 30rpx rgba(23, 61, 156, 0.08);
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  font-size: 31rpx;
+  font-weight: 700;
+  color: #1b2a4a;
+  margin-bottom: 20rpx;
+}
+
+.card-title::before {
+  content: '';
+  width: 10rpx;
+  height: 30rpx;
+  border-radius: 6rpx;
+  background: linear-gradient(180deg, #3b82f6, #7fc0f7);
+  margin-right: 16rpx;
+}
+
+button::after {
+  border: none;
+}
+
+/* 主按钮 */
+.btn-primary {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #3b82f6 0%, #7ac0f8 100%);
+  color: #fff;
+  border-radius: 48rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  line-height: 92rpx;
+  text-align: center;
+  margin: 0;
+  letter-spacing: 4rpx;
+  box-shadow: 0 12rpx 26rpx rgba(59, 130, 246, 0.32);
+}
+
+.btn-primary.disabled {
+  opacity: 0.65;
+}
+
+.btn-wrap {
+  padding: 24rpx 28rpx;
+}
+
+/* 标签 */
+.tag {
+  display: inline-block;
+  padding: 6rpx 18rpx;
+  border-radius: 24rpx;
+  font-size: 22rpx;
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+.tag-blue { background: #e6f1fd; color: #3b82f6; }
+.tag-green { background: #e4f8ef; color: #0cae6d; }
+.tag-orange { background: #fff3e2; color: #f08a24; }
+.tag-red { background: #ffe9ec; color: #f04355; }
+.tag-gray { background: #eef1f6; color: #6b7892; }
+
+/* 图标气泡 */
+.bubble {
+  width: 92rpx;
+  height: 92rpx;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44rpx;
+}
+
+.bubble-blue { background: linear-gradient(135deg, #e6f1fd, #d4e7fc); box-shadow: 0 8rpx 18rpx rgba(59, 130, 246, 0.16); }
+.bubble-cyan { background: linear-gradient(135deg, #e2f4fd, #cfeafc); box-shadow: 0 8rpx 18rpx rgba(59, 130, 246, 0.14); }
+.bubble-green { background: linear-gradient(135deg, #e6faf1, #d2f5e5); box-shadow: 0 8rpx 18rpx rgba(12, 174, 109, 0.16); }
+.bubble-orange { background: linear-gradient(135deg, #fff4e5, #ffe8cb); box-shadow: 0 8rpx 18rpx rgba(240, 138, 36, 0.16); }
+.bubble-purple { background: linear-gradient(135deg, #f1ecff, #e4d9ff); box-shadow: 0 8rpx 18rpx rgba(124, 77, 255, 0.16); }
+.bubble-red { background: linear-gradient(135deg, #ffecef, #ffdbe0); box-shadow: 0 8rpx 18rpx rgba(240, 67, 85, 0.14); }
+
+/* 状态值配色 */
+.ok { color: #0cae6d; }
+.warn { color: #f08a24; }
+.bad { color: #f04355; }
+
+/* 空状态 */
+.empty {
+  text-align: center;
+  color: #98a3b8;
+  padding: 100rpx 40rpx;
+  font-size: 26rpx;
+}
+
+.empty-icon {
+  font-size: 88rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-sub {
+  font-size: 23rpx;
+  margin-top: 12rpx;
+  color: #b3bccd;
+}

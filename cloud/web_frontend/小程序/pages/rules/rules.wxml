@@ -1,0 +1,47 @@
+<view class="card rule-card">
+  <view class="rule-head rh-blue">
+    <view class="rh-icon">🏫</view>
+    <text>进入实验室</text>
+  </view>
+  <view class="rule-list">
+    <view class="rule-item"><view class="rule-num">1</view><view class="rule-text">进入实验室前请通过小程序完成定位签到，登记到访信息。</view></view>
+    <view class="rule-item"><view class="rule-num">2</view><view class="rule-text">必须穿着实验服，长发需束起，禁止穿拖鞋进入实验室。</view></view>
+    <view class="rule-item"><view class="rule-num">3</view><view class="rule-text">禁止携带食物、饮料进入实验室，实验室内严禁饮食与吸烟。</view></view>
+  </view>
+</view>
+
+<view class="card rule-card">
+  <view class="rule-head rh-cyan">
+    <view class="rh-icon">🔌</view>
+    <text>仪器使用</text>
+  </view>
+  <view class="rule-list">
+    <view class="rule-item"><view class="rule-num">4</view><view class="rule-text">使用仪器前必须阅读操作规程，未经培训不得擅自操作大型设备。</view></view>
+    <view class="rule-item"><view class="rule-num">5</view><view class="rule-text">接线、通电前须检查电源与设备状态，禁止超负荷使用电源插座。</view></view>
+    <view class="rule-item"><view class="rule-num">6</view><view class="rule-text">仪器出现异常（冒烟、异味、报警）应立即断电并报告管理员。</view></view>
+  </view>
+</view>
+
+<view class="card rule-card">
+  <view class="rule-head rh-green">
+    <view class="rh-icon">🧹</view>
+    <text>实验结束</text>
+  </view>
+  <view class="rule-list">
+    <view class="rule-item"><view class="rule-num">7</view><view class="rule-text">实验结束后关闭仪器电源，拔下插头，将仪器与椅子归位。</view></view>
+    <view class="rule-item"><view class="rule-num">8</view><view class="rule-text">清理工位台面与地面，带走个人物品，不得遗留水杯、手机等。</view></view>
+    <view class="rule-item"><view class="rule-num">9</view><view class="rule-text">离开实验室前检查门窗水电，并完成签退。</view></view>
+  </view>
+</view>
+
+<view class="card rule-card">
+  <view class="rule-head rh-orange">
+    <view class="rh-icon">🚨</view>
+    <text>应急处理</text>
+  </view>
+  <view class="rule-list">
+    <view class="rule-item"><view class="rule-num">10</view><view class="rule-text">熟悉灭火器、洗眼器、急救箱位置及疏散路线。</view></view>
+    <view class="rule-item"><view class="rule-num">11</view><view class="rule-text">发生火情立即切断电源、报警并有序撤离，禁止乘坐电梯。</view></view>
+    <view class="rule-item"><view class="rule-num">12</view><view class="rule-text">巡检机器人工作期间请勿阻挡其行驶路线，爱护设备人人有责。</view></view>
+  </view>
+</view>
